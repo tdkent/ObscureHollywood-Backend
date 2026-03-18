@@ -1,0 +1,48 @@
+# RUN ON:
+# PR opened or synchronized.
+# Manual activation.
+
+# JOBS:
+# Lint code and run automated tests.
+
+name: 'Test Application'
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths-ignore:
+      - '.github/**'
+      - '.husky/**'
+      - '.gitignore'
+      - '.prettierignore'
+      - '.prettierrc'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v6
+
+      - name: Cache deps
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: deps-node-module-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install deps
+        run: npm install
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Test code
+        run: npm run test
