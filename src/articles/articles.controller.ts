@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ArticlesService } from './providers/articles.service';
-import { FindOneParamDto } from 'src/articles/dto/find-one-param.dto';
+import { FindOneParamDto } from './dto/find-one-param.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('articles')
@@ -8,6 +8,13 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Finds many articles.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'An array of articles.',
+  })
   findAll() {
     return this.articlesService.findAll();
   }
@@ -18,7 +25,7 @@ export class ArticlesController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Fetches the requested resource.',
+    description: 'A single article.',
   })
   @ApiResponse({
     status: 400,
