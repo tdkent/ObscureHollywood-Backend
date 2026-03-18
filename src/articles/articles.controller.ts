@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ArticlesService } from './providers/articles.service';
+import { FindOneParamDto } from 'src/articles/dto/find-one-param.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -11,7 +12,7 @@ export class ArticlesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articlesService.findOne(+id);
+  findOne(@Param() findOneParamsDto: FindOneParamDto) {
+    return this.articlesService.findOne(findOneParamsDto.id);
   }
 }
