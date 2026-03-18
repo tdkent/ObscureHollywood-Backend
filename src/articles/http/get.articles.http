@@ -1,0 +1,9 @@
+### Find all articles
+# GET /articles
+# Sends an array of article objects.
+GET {{localBaseUrl}}/articles
+
+### Find one article by id.
+# GET /articles/:id
+# Sends an article object.
+GET {{localBaseUrl}}/articles/2
