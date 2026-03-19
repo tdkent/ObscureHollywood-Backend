@@ -30,9 +30,6 @@ export class LogRequestsInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        /**
-         * Log to console in dev mode only
-         */
         if (env === 'development') {
           console.log(
             'New Request:',
@@ -43,9 +40,6 @@ export class LogRequestsInterceptor implements NestInterceptor {
           );
         }
 
-        /**
-         * Send log to Sentry
-         */
         Sentry.logger.info('New Request:', {
           env,
           method,
