@@ -3,4 +3,6 @@ import * as Sentry from '@sentry/nestjs';
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   sendDefaultPii: false,
+  enableLogs: true,
+  integrations: [Sentry.consoleLoggingIntegration({ levels: ['log'] })],
 });
