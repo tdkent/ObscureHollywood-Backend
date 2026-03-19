@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { CatchExceptionsFilter } from './common/filters/catch-exception.filter';
+import { LogRequestsInterceptor } from 'src/common/interceptors/log-requestsinterceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  /**
+   * Global Request Logging Interceptor
+   */
+  app.useGlobalInterceptors(new LogRequestsInterceptor());
 
   /**
    * Global Exception Filter
