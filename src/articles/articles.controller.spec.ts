@@ -45,12 +45,12 @@ describe('ArticlesController', () => {
 
   describe('GET /articles/:id route', () => {
     it('should call findOne service method once', () => {
-      controller.findOne('1');
+      controller.findOne({ id: 1 });
       expect(service.findOne).toHaveBeenCalledTimes(1);
     });
 
     it('should return an article object with the correct id', () => {
-      const response = controller.findOne('1');
+      const response = controller.findOne({ id: 1 });
       expect(response).toEqual({ id: 1 });
     });
   });
