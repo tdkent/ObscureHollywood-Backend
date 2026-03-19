@@ -1,8 +1,9 @@
+import './instrument';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { CatchExceptionsFilter } from './common/filters/catch-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,7 +34,7 @@ async function bootstrap() {
   /**
    * Global Exception Filter
    */
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new CatchExceptionsFilter());
 
   /**
    * Listener
