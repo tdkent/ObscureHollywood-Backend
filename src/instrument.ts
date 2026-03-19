@@ -4,5 +4,4 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   sendDefaultPii: false,
   enableLogs: true,
-  integrations: [Sentry.consoleLoggingIntegration({ levels: ['log'] })],
 });
