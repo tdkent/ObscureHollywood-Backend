@@ -1,0 +1,4 @@
+### Find all films with pagination queries
+# GET /films
+# Sends an array of Film objects.
+GET {{localBaseUrl}}/films

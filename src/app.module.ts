@@ -6,6 +6,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LogRequestsInterceptor } from './common/interceptors/log-requests.interceptor';
 import { CatchExceptionsFilter } from './common/filters/catch-exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FilmsModule } from './films/films.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     ArticlesModule,
+    FilmsModule,
   ],
   providers: [
     /**
