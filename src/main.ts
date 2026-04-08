@@ -27,6 +27,13 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true,
+      /*
+       * Implicitly convert types (replaces Type decorator in DTO)
+       */
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
