@@ -42,6 +42,12 @@ export class Film {
   name: string;
 
   @Column({
+    type: 'varchar',
+    length: 64,
+  })
+  sortName: string;
+
+  @Column({
     type: 'smallint',
   })
   releaseYear: number;
