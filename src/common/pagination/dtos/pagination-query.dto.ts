@@ -1,7 +1,7 @@
-import { IsPositive } from 'class-validator';
+import { IsIn, IsPositive } from 'class-validator';
 
 export class PaginationQueryDto {
-  @IsPositive()
+  @IsIn([10, 25])
   limit: number = 10;
 
   @IsPositive()
