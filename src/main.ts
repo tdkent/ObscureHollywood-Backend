@@ -11,10 +11,8 @@ async function bootstrap() {
    * Swagger Documentation
    */
   const config = new DocumentBuilder()
-    .setTitle('Obscure Hollywood API')
-    .setDescription(
-      'Documentation of endpoints in the Obscure Hollywood REST API.',
-    )
+    .setTitle('Obscure Hollywood - Server REST API')
+    .setDescription('Base API URL is http://localhost:3000')
     .setVersion('1.0')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
