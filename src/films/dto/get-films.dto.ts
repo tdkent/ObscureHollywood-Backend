@@ -4,7 +4,7 @@ import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.
 
 class GetFilmsBaseDto {
   @IsIn(['nameAsc', 'nameDesc', 'yearAsc', 'yearDesc'])
-  orderBy: string;
+  orderBy: 'nameAsc' | 'nameDesc' | 'yearAsc' | 'yearDesc' = 'nameAsc';
 }
 
 export class GetFilmsDto extends IntersectionType(
