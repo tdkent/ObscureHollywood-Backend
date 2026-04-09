@@ -1,4 +1,7 @@
 ### Find all films with pagination queries
 # GET /films
 # Sends an array of Film objects.
-GET {{localBaseUrl}}/films?limit=25&page=2
+GET {{localBaseUrl}}/films
+?limit=25
+&page=2
+&orderBy=yearAsc

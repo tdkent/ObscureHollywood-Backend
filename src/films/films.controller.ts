@@ -1,13 +1,13 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FilmsService } from 'src/films/providers/films.service';
-import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 
 @Controller('films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Get()
-  findAll(@Query() reqQuery: PaginationQueryDto) {
+  findAll(@Query() reqQuery: GetFilmsDto) {
     return this.filmsService.findAll(reqQuery);
   }
 
