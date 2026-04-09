@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { FilmsService } from './providers/films.service';
-import { PaginationQueryDto } from '../common/pagination/dtos/pagination-query.dto';
+import { FilmsService } from 'src/films/providers/films.service';
+import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 @Controller('films')
 export class FilmsController {

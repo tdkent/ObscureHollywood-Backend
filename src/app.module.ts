@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ArticlesModule } from './articles/articles.module';
+import { ArticlesModule } from 'src/articles/articles.module';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { LogRequestsInterceptor } from './common/interceptors/log-requests.interceptor';
-import { CatchExceptionsFilter } from './common/filters/catch-exception.filter';
+import { LogRequestsInterceptor } from 'src/common/interceptors/log-requests.interceptor';
+import { CatchExceptionsFilter } from 'src/common/filters/catch-exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FilmsModule } from './films/films.module';
+import { FilmsModule } from 'src/films/films.module';
 import { Film } from 'src/films/entities/film.entity';
 
 @Module({
