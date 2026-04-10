@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  // ManyToOne,
+  ManyToOne,
   // OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -21,7 +21,10 @@ import {
 // 	PersonFilm,
 // 	type PersonFilm as PersonFilmType,
 // } from "../PersonFilm/PersonFilm.entity.js";
-// import { Studio, type Studio as StudioType } from "../Studio/Studio.entity.js";
+import {
+  Studio,
+  type Studio as StudioType,
+} from 'src/studios/entities/studio.entity';
 
 @Entity()
 export class Film {
@@ -74,11 +77,8 @@ export class Film {
   @JoinColumn()
   article: ArticleType; // use type to avoid ReferenceError
 
-  // @ManyToOne(
-  // 	() => Studio,
-  // 	(studio) => studio.films,
-  // )
-  // studio: StudioType;
+  @ManyToOne(() => Studio, (studio) => studio.films)
+  studio: StudioType;
 
   // @OneToMany(
   // 	() => PersonFilm,
