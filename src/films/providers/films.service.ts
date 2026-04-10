@@ -39,16 +39,6 @@ export class FilmsService {
               : { sortName: 'ASC', releaseYear: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
-      relations: {
-        article: true,
-        filmTags: {
-          tag: true,
-        },
-        personFilms: {
-          person: true,
-        },
-        studio: true,
-      },
     });
 
     const totalItems = await this.filmsRepository.count();
@@ -84,9 +74,21 @@ export class FilmsService {
   }
 
   public async findOne(slug: string) {
-    const film = await this.filmsRepository.findOneBy({ slug });
+    const film = await this.filmsRepository.find({
+      where: { slug },
+      relations: {
+        article: true,
+        personFilms: {
+          person: true,
+        },
+        studio: true,
+        filmTags: {
+          tag: true,
+        },
+      },
+    });
 
-    if (!film) throw new NotFoundException();
+    if (!film.length) throw new NotFoundException();
 
     return film;
   }

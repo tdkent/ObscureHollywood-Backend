@@ -9,4 +9,4 @@ GET {{localBaseUrl}}/films
 ### Find a single film
 # GET /films/:slug
 # Sends a single film with Article, Person, Studio, Tag relations
-GET {{localBaseUrl}}/films/test-slug
+GET {{localBaseUrl}}/films/the-americano-1916
