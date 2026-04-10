@@ -41,6 +41,9 @@ export class FilmsService {
       take: limit,
       relations: {
         article: true,
+        filmTags: {
+          tag: true,
+        },
         studio: true,
       },
     });
