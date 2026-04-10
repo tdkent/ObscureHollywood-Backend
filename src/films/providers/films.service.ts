@@ -83,7 +83,7 @@ export class FilmsService {
     return finalResponse;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  findOne(slug: string) {
+    return `This action the film with slug ${slug}`;
   }
 }

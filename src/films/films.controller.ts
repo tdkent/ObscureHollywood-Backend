@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FilmsService } from 'src/films/providers/films.service';
 import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { GetFilmDto } from 'src/films/dto/get-film.dto';
 
 @Controller('films')
 export class FilmsController {
@@ -24,8 +25,8 @@ export class FilmsController {
     return this.filmsService.findAll(reqQuery);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filmsService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param() reqParams: GetFilmDto) {
+    return this.filmsService.findOne(reqParams.slug);
   }
 }
