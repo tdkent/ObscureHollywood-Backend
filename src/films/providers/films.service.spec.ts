@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Film } from 'src/films/entities/film.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 
 describe('FilmsService', () => {
   let service: FilmsService;
@@ -12,7 +13,7 @@ describe('FilmsService', () => {
   >;
 
   const mockFilmRepository: jest.Mocked<
-    Pick<Repository<Film>, 'find' | 'count'>
+    Pick<Repository<Partial<Film>>, 'find' | 'count'>
   > = {
     find: jest.fn(),
     count: jest.fn(),
@@ -49,32 +50,45 @@ describe('FilmsService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll() database function', () => {
+  describe('findAll', () => {
+    const query: GetFilmsDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
+
     it('should call repository.count() and repository.find()', async () => {
+      repository.count.mockResolvedValue(0);
       repository.find.mockResolvedValue([]);
-      await service.findAll({ limit: 25, page: 100, orderBy: 'nameAsc' });
+
+      await service.findAll(query);
+
       expect(repository.count).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledTimes(1);
+      expect(repository.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          take: query.limit,
+          skip: (query.page - 1) * 10,
+          order: { sortName: 'ASC', releaseYear: 'ASC' },
+        }),
+      );
     });
 
-    it('should return an array of Film items', async () => {
+    it('should return a count and an array of films', async () => {
       const films: Partial<Film>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
       repository.find.mockResolvedValue(films);
-      const result = await service.findAll({
-        limit: 10,
-        page: 1,
-        orderBy: 'nameAsc',
-      });
+      repository.count.mockResolvedValue(100);
+
+      const result = await service.findAll(query);
+
       expect(result.data).toEqual(films);
+      expect(result.links.current).toBeDefined();
+      expect(result.links.first).toBeDefined();
+      expect(result.meta.currentPage).toBe(1);
+      expect(result.meta.totalItems).toEqual(100);
     });
 
     it('should return an empty array if no data can be found', async () => {
       repository.find.mockResolvedValue([]);
-      const result = await service.findAll({
-        limit: 25,
-        page: 100,
-        orderBy: 'nameAsc',
-      });
+      repository.count.mockResolvedValue(0);
+      const result = await service.findAll(query);
       expect(result.data).toEqual([]);
     });
   });

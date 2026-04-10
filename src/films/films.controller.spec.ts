@@ -1,18 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FilmsController } from 'src/films/films.controller';
 import { FilmsService } from 'src/films/providers/films.service';
+import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 
 describe('FilmsController', () => {
   let controller: FilmsController;
   let service: FilmsService;
 
   const mockFilmsService = {
-    findAll: jest.fn(() => {
-      return [{ id: 1 }, { id: 2 }];
-    }),
+    findAll: jest.fn(),
   };
 
   beforeEach(async () => {
+    // Default return value that can be overridden directly in tests.
+    mockFilmsService.findAll.mockResolvedValue([]);
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FilmsController],
       providers: [
@@ -27,23 +29,37 @@ describe('FilmsController', () => {
     service = module.get<FilmsService>(FilmsService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('GET /films route', () => {
-    it('should call findAll service method once', () => {
-      controller.findAll({ limit: 2, orderBy: 'nameAsc', page: 1 });
+  describe('findAll', () => {
+    const query: GetFilmsDto = { limit: 2, orderBy: 'nameAsc', page: 1 };
+
+    it('should call findAll service method once', async () => {
+      await controller.findAll(query);
       expect(service.findAll).toHaveBeenCalledTimes(1);
     });
 
-    it('should return an array of Film entity objects', () => {
-      const response = controller.findAll({
-        limit: 2,
-        orderBy: 'nameAsc',
-        page: 1,
-      });
+    it('should pass query params to the service', async () => {
+      await controller.findAll(query);
+      expect(service.findAll).toHaveBeenCalledWith(query);
+    });
+
+    it('should return an array of films', async () => {
+      mockFilmsService.findAll.mockResolvedValue([{ id: 1 }, { id: 2 }]);
+      const response = await controller.findAll(query);
       expect(response).toEqual([{ id: 1 }, { id: 2 }]);
+    });
+
+    it('should return an empty array when no films exist', async () => {
+      mockFilmsService.findAll.mockResolvedValue([]);
+      const response = await controller.findAll(query);
+      expect(response).toEqual([]);
     });
   });
 });
