@@ -15,7 +15,7 @@ describe('FilmsController', () => {
   beforeEach(async () => {
     // Default return values that can be overridden directly in tests.
     mockFilmsService.findAll.mockResolvedValue([]);
-    mockFilmsService.findOne.mockResolvedValue([]);
+    mockFilmsService.findOne.mockResolvedValue(null);
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FilmsController],
@@ -78,8 +78,8 @@ describe('FilmsController', () => {
       expect(service.findOne).toHaveBeenCalledWith(params.slug);
     });
 
-    it('should return an array containing the film', async () => {
-      const mockFilm = [{ id: 1 }];
+    it('should return the film', async () => {
+      const mockFilm = { id: 1 };
       mockFilmsService.findOne.mockResolvedValue(mockFilm);
       const response = await controller.findOne(params);
       expect(response).toEqual(mockFilm);

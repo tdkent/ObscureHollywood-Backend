@@ -74,7 +74,7 @@ export class FilmsService {
   }
 
   public async findOne(slug: string) {
-    const film = await this.filmsRepository.find({
+    const film = await this.filmsRepository.findOne({
       where: { slug },
       relations: {
         article: true,
@@ -88,7 +88,7 @@ export class FilmsService {
       },
     });
 
-    if (!film.length) throw new NotFoundException();
+    if (!film) throw new NotFoundException();
 
     return film;
   }

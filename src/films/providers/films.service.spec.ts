@@ -9,13 +9,14 @@ import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 describe('FilmsService', () => {
   let service: FilmsService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'find' | 'count'>
+    Pick<Repository<Partial<Film>>, 'find' | 'findOne' | 'count'>
   >;
 
   const mockFilmRepository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'find' | 'count'>
+    Pick<Repository<Partial<Film>>, 'find' | 'findOne' | 'count'>
   > = {
     find: jest.fn(),
+    findOne: jest.fn(),
     count: jest.fn(),
   };
 
@@ -90,6 +91,32 @@ describe('FilmsService', () => {
       repository.count.mockResolvedValue(0);
       const result = await service.findAll(query);
       expect(result.data).toEqual([]);
+    });
+  });
+
+  describe('findOne', () => {
+    const params = { slug: 'the-americano-1916' };
+    const mockFilm = { id: 1 };
+
+    it('should call repository.findOne()', async () => {
+      repository.findOne.mockResolvedValue(mockFilm);
+
+      await service.findOne(params.slug);
+
+      expect(repository.findOne).toHaveBeenCalledTimes(1);
+      expect(repository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { slug: params.slug },
+        }),
+      );
+    });
+
+    it('should return an array with a single film', async () => {
+      repository.findOne.mockResolvedValue(mockFilm);
+
+      const result = await service.findOne(params.slug);
+
+      expect(result).toEqual(mockFilm);
     });
   });
 });
