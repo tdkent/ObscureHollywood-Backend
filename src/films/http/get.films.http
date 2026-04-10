@@ -2,6 +2,6 @@
 # GET /films
 # Sends an array of Film objects.
 GET {{localBaseUrl}}/films
-?limit=25
-&page=2
-&orderBy=yearAsc
+?limit=10
+&page=1
+&orderBy=nameAsc

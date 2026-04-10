@@ -2,17 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // JoinColumn,
+  JoinColumn,
   // ManyToOne,
   // OneToMany,
-  // OneToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import {
-// 	Article,
-// 	type Article as ArticleType,
-// } from "../Article/Article.entity.js";
+import {
+  Article,
+  type Article as ArticleType,
+} from 'src/articles/entities/article.entity';
 // import {
 // 	FilmTag,
 // 	type FilmTag as FilmTagType,
@@ -68,15 +68,11 @@ export class Film {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // @OneToOne(
-  // 	() => Article,
-  // 	(article) => article.film,
-  // 	{
-  // 		onDelete: "CASCADE",
-  // 	},
-  // )
-  // @JoinColumn()
-  // article: ArticleType; // use type to avoid ReferenceError
+  @OneToOne(() => Article, (article) => article.film, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  article: ArticleType; // use type to avoid ReferenceError
 
   // @ManyToOne(
   // 	() => Studio,

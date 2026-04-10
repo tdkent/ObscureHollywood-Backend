@@ -39,6 +39,9 @@ export class FilmsService {
               : { sortName: 'ASC', releaseYear: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
+      relations: {
+        article: true,
+      },
     });
 
     const totalItems = await this.filmsRepository.count();
