@@ -7,7 +7,6 @@ import { LogRequestsInterceptor } from 'src/common/interceptors/log-requests.int
 import { CatchExceptionsFilter } from 'src/common/filters/catch-exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilmsModule } from 'src/films/films.module';
-import { Film } from 'src/films/entities/film.entity';
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { Film } from 'src/films/entities/film.entity';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [Film],
+        autoLoadEntities: true,
         synchronize: false,
         migrationsRun: false,
       }),
