@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { Film } from 'src/films/entities/film.entity';
@@ -83,7 +83,11 @@ export class FilmsService {
     return finalResponse;
   }
 
-  findOne(slug: string) {
-    return `This action the film with slug ${slug}`;
+  public async findOne(slug: string) {
+    const film = await this.filmsRepository.findOneBy({ slug });
+
+    if (!film) throw new NotFoundException();
+
+    return film;
   }
 }
