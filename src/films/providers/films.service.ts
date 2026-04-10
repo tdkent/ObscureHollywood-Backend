@@ -44,6 +44,9 @@ export class FilmsService {
         filmTags: {
           tag: true,
         },
+        personFilms: {
+          person: true,
+        },
         studio: true,
       },
     });
