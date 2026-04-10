@@ -9,11 +9,13 @@ describe('FilmsController', () => {
 
   const mockFilmsService = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
-    // Default return value that can be overridden directly in tests.
+    // Default return values that can be overridden directly in tests.
     mockFilmsService.findAll.mockResolvedValue([]);
+    mockFilmsService.findOne.mockResolvedValue([]);
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FilmsController],
@@ -60,6 +62,27 @@ describe('FilmsController', () => {
       mockFilmsService.findAll.mockResolvedValue([]);
       const response = await controller.findAll(query);
       expect(response).toEqual([]);
+    });
+  });
+
+  describe('findOne', () => {
+    const params = { slug: 'the-americano-1916' };
+
+    it('should call findOne service method once', async () => {
+      await controller.findOne(params);
+      expect(service.findOne).toHaveBeenCalledTimes(1);
+    });
+
+    it('should pass slug to the service', async () => {
+      await controller.findOne(params);
+      expect(service.findOne).toHaveBeenCalledWith(params.slug);
+    });
+
+    it('should return an array containing the film', async () => {
+      const mockFilm = [{ id: 1 }];
+      mockFilmsService.findOne.mockResolvedValue(mockFilm);
+      const response = await controller.findOne(params);
+      expect(response).toEqual(mockFilm);
     });
   });
 });
