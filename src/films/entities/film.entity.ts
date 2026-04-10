@@ -4,7 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  // OneToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,10 +13,10 @@ import {
   Article,
   type Article as ArticleType,
 } from 'src/articles/entities/article.entity';
-// import {
-// 	FilmTag,
-// 	type FilmTag as FilmTagType,
-// } from "../FilmTag/FilmTag.entity.js";
+import {
+  FilmTag,
+  type FilmTag as FilmTagType,
+} from 'src/common/entities/film-tag.entity';
 // import {
 // 	PersonFilm,
 // 	type PersonFilm as PersonFilmType,
@@ -86,9 +86,6 @@ export class Film {
   // )
   // personFilms: PersonFilmType[];
 
-  // @OneToMany(
-  // 	() => FilmTag,
-  // 	(filmTag) => filmTag.film,
-  // )
-  // filmTags: FilmTagType[];
+  @OneToMany(() => FilmTag, (filmTag) => filmTag.film)
+  filmTags: FilmTagType[];
 }
