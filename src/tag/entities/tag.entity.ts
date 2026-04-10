@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import {
   FilmTag,
   type FilmTag as FilmTagType,
-} from 'src/common/entities/film-tag.entity';
+} from 'src/films/entities/film-tag.entity';
 
 enum Type {
   DECADE = 'decade',

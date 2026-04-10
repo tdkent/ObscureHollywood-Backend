@@ -5,12 +5,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Film } from 'src/films/entities/film.entity';
 import { Article } from 'src/articles/entities/article.entity';
 import { Studio } from 'src/studios/entities/studio.entity';
-import { FilmTag } from 'src/common/entities/film-tag.entity';
+import { FilmTag } from 'src/films/entities/film-tag.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
+import { PersonFilm } from 'src/persons/entities/person-film.entity';
+import { Person } from 'src/persons/entities/person.entity';
 
 @Module({
   controllers: [FilmsController],
-  imports: [TypeOrmModule.forFeature([Article, Film, FilmTag, Studio, Tag])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Article,
+      Film,
+      FilmTag,
+      Person,
+      PersonFilm,
+      Studio,
+      Tag,
+    ]),
+  ],
   providers: [FilmsService],
 })
 export class FilmsModule {}

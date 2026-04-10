@@ -9,7 +9,10 @@ import {
 } from 'typeorm';
 // import { ArticleRelation } from "../ArticleRelation/ArticleRelation.entity.js";
 import { Film, Film as FilmType } from 'src/films/entities/film.entity';
-// import { Person, type Person as PersonType } from "../Person/Person.entity.js";
+import {
+  Person,
+  type Person as PersonType,
+} from 'src/persons/entities/person.entity';
 
 export enum Category {
   FEATURE = 'feature',
@@ -54,11 +57,8 @@ export class Article {
   @OneToOne(() => Film, (film) => film.article)
   film: FilmType;
 
-  // @OneToOne(
-  // 	() => Person,
-  // 	(person) => person.article,
-  // )
-  // person: PersonType;
+  @OneToOne(() => Person, (person) => person.article)
+  person: PersonType;
 
   // @OneToMany(
   // 	() => ArticleRelation,

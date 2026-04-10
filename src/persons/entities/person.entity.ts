@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -14,20 +13,12 @@ import {
   type Article as ArticleType,
 } from 'src/articles/entities/article.entity';
 import {
-  FilmTag,
-  type FilmTag as FilmTagType,
-} from 'src/films/entities/film-tag.entity';
-import {
   PersonFilm,
   type PersonFilm as PersonFilmType,
 } from 'src/persons/entities/person-film.entity';
-import {
-  Studio,
-  type Studio as StudioType,
-} from 'src/studios/entities/studio.entity';
 
 @Entity()
-export class Film {
+export class Person {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -40,30 +31,41 @@ export class Film {
 
   @Column({
     type: 'varchar',
-    length: 64,
+    length: 32,
   })
-  name: string;
+  firstName: string;
+
+  @Column({
+    type: 'varchar',
+    length: 32,
+  })
+  lastName: string;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  birthYear: number;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  deathYear: number;
 
   @Column({
     type: 'varchar',
     length: 64,
+    nullable: true,
   })
-  sortName: string;
+  birthPlace: string;
 
   @Column({
-    type: 'smallint',
+    type: 'varchar',
+    length: 64,
+    nullable: true,
   })
-  releaseYear: number;
-
-  @Column({
-    type: 'boolean',
-  })
-  isSilent: boolean;
-
-  @Column({
-    type: 'boolean',
-  })
-  isPreCode: boolean;
+  deathPlace: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -71,18 +73,13 @@ export class Film {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => Article, (article) => article.film, {
+  @OneToOne(() => Article, (article) => article.person, {
+    nullable: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn()
-  article: ArticleType; // use type to avoid ReferenceError
+  article: ArticleType;
 
-  @ManyToOne(() => Studio, (studio) => studio.films)
-  studio: StudioType;
-
-  @OneToMany(() => PersonFilm, (pf) => pf.film)
+  @OneToMany(() => PersonFilm, (pf) => pf.person)
   personFilms: PersonFilmType[];
-
-  @OneToMany(() => FilmTag, (filmTag) => filmTag.film)
-  filmTags: FilmTagType[];
 }
