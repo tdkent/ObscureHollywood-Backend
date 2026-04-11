@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ArticlesModule } from 'src/articles/articles.module';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { ConfigModule } from '@nestjs/config';
@@ -40,6 +40,13 @@ import { FilmsModule } from 'src/films/films.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: LogRequestsInterceptor,
+    },
+    /**
+     * Global Response Serialization Interceptor
+     */
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
     /**
      * Global Exception Filter
