@@ -11,6 +11,7 @@ import {
   Article,
   type Article as ArticleType,
 } from 'src/articles/entities/article.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Feature {
@@ -31,9 +32,11 @@ export class Feature {
   slug: string;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @OneToOne(() => Article, (article) => article.film, {
