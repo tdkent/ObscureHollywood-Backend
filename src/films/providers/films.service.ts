@@ -4,7 +4,7 @@ import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { Film } from 'src/films/entities/film.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import type { PaginatedResponse } from 'src/common/pagination/paginated-response.interface';
+import type { PaginatedResponse } from 'src/common/pagination/types/paginated-response.interface';
 
 @Injectable()
 export class FilmsService {
