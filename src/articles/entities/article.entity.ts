@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // OneToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import { ArticleRelation } from "../ArticleRelation/ArticleRelation.entity.js";
+import { ArticleRelation } from 'src/articles/entities/article-relation.entity';
 import { Film, Film as FilmType } from 'src/films/entities/film.entity';
 import {
   Person,
@@ -60,15 +60,9 @@ export class Article {
   @OneToOne(() => Person, (person) => person.article)
   person: PersonType;
 
-  // @OneToMany(
-  // 	() => ArticleRelation,
-  // 	(ar) => ar.article,
-  // )
-  // outgoingRelations: ArticleRelation[];
+  @OneToMany(() => ArticleRelation, (ar) => ar.article)
+  outgoingRelations: ArticleRelation[];
 
-  // @OneToMany(
-  // 	() => ArticleRelation,
-  // 	(ar) => ar.relatedArticle,
-  // )
-  // incomingRelations: ArticleRelation[];
+  @OneToMany(() => ArticleRelation, (ar) => ar.relatedArticle)
+  incomingRelations: ArticleRelation[];
 }
