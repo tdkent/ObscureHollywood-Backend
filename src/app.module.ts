@@ -7,6 +7,7 @@ import { LogRequestsInterceptor } from 'src/common/interceptors/log-requests.int
 import { CatchExceptionsFilter } from 'src/common/filters/catch-exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilmsModule } from 'src/films/films.module';
+import { FeaturesModule } from './features/features.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FilmsModule } from 'src/films/films.module';
     }),
     ArticlesModule,
     FilmsModule,
+    FeaturesModule,
   ],
   providers: [
     /**

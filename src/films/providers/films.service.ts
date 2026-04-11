@@ -21,7 +21,7 @@ export class FilmsService {
   ) {}
 
   /**
-   * Send a list of Films with pagination and sorting.
+   * Send a list of films with pagination and sorting.
    */
   public async findAll(
     reqQuery: GetFilmsDto,
@@ -73,6 +73,9 @@ export class FilmsService {
     return finalResponse;
   }
 
+  /**
+   * Send a single film with relations.
+   */
   public async findOne(slug: string) {
     const film = await this.filmsRepository.findOne({
       where: { slug },

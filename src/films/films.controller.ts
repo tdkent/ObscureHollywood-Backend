@@ -8,9 +8,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetFilmDto } from 'src/films/dto/get-film.dto';
 import { GetFilmResponseDto } from 'src/films/dto/get-film-response.dto';
 import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
+import { SlugDto } from 'src/common/dtos/slug.dto';
 
 @Controller('films')
 @ApiTags('films')
@@ -50,7 +50,7 @@ export class FilmsController {
   @ApiNotFoundResponse({
     description: 'No film was found for the provided slug.',
   })
-  findOne(@Param() reqParams: GetFilmDto) {
+  findOne(@Param() reqParams: SlugDto) {
     return this.filmsService.findOne(reqParams.slug);
   }
 }

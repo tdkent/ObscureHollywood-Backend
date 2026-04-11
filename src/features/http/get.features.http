@@ -1,0 +1,12 @@
+### Find all feature articles with pagination queries
+# GET /features
+# Sends an array of features.
+GET {{localBaseUrl}}/features
+?limit=10
+&page=1
+&orderBy=nameAsc
+
+### Find a single feature
+# GET /features/:slug
+# Sends a single feature with Article relations.
+GET {{localBaseUrl}}/features/corriganville
