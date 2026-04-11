@@ -6,7 +6,7 @@ GET {{localBaseUrl}}/features
 &page=1
 &orderBy=nameAsc
 
-### Find a single film
-# GET /films/:slug
-# Sends a single film with Article, Person, Studio, Tag relations
-GET {{localBaseUrl}}/films/the-americano-1916
+### Find a single feature
+# GET /features/:slug
+# Sends a single feature with Article relations.
+GET {{localBaseUrl}}/features/corriganville

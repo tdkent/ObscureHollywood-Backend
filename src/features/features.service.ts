@@ -25,7 +25,7 @@ export class FeaturesService {
     return features;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} feature`;
+  findOne(slug: string) {
+    return `This action returns a feature with slug ${slug}`;
   }
 }

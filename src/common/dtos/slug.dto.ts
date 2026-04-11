@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-export class GetFilmDto {
+export class SlugDto {
   @ApiProperty({
-    description: 'Film title slug',
-    example: 'the-americano-1916',
+    description: 'Unique slug to identify resource',
+    example: 'name-of-resource',
   })
   @IsString()
   @MinLength(1)
