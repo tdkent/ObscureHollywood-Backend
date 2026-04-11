@@ -25,6 +25,7 @@ import {
   Studio,
   type Studio as StudioType,
 } from 'src/studios/entities/studio.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Film {
@@ -48,6 +49,7 @@ export class Film {
     type: 'varchar',
     length: 64,
   })
+  @Exclude()
   sortName: string;
 
   @Column({
@@ -55,20 +57,12 @@ export class Film {
   })
   releaseYear: number;
 
-  @Column({
-    type: 'boolean',
-  })
-  isSilent: boolean;
-
-  @Column({
-    type: 'boolean',
-  })
-  isPreCode: boolean;
-
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @OneToOne(() => Article, (article) => article.film, {
