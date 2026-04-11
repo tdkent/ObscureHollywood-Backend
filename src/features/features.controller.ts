@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { FeaturesService } from './features.service';
+import { FeaturesService } from 'src/features/providers/features.service';
 import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 
