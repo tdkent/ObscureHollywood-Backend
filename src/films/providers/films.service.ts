@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { Film } from 'src/films/entities/film.entity';
@@ -39,16 +39,6 @@ export class FilmsService {
               : { sortName: 'ASC', releaseYear: 'ASC' },
       skip: (page - 1) * limit,
       take: limit,
-      relations: {
-        article: true,
-        filmTags: {
-          tag: true,
-        },
-        personFilms: {
-          person: true,
-        },
-        studio: true,
-      },
     });
 
     const totalItems = await this.filmsRepository.count();
@@ -83,7 +73,23 @@ export class FilmsService {
     return finalResponse;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  public async findOne(slug: string) {
+    const film = await this.filmsRepository.findOne({
+      where: { slug },
+      relations: {
+        article: true,
+        personFilms: {
+          person: true,
+        },
+        studio: true,
+        filmTags: {
+          tag: true,
+        },
+      },
+    });
+
+    if (!film) throw new NotFoundException();
+
+    return film;
   }
 }

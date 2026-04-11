@@ -1,31 +1,56 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FilmsService } from 'src/films/providers/films.service';
 import { GetFilmsDto } from 'src/films/dto/get-films.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GetFilmDto } from 'src/films/dto/get-film.dto';
+import { GetFilmResponseDto } from 'src/films/dto/get-film-response.dto';
+import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
 
 @Controller('films')
+@ApiTags('films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Get()
   @ApiOperation({
-    summary: 'Finds many films with pagination and sorting.',
-  })
-  @ApiResponse({
-    status: 200,
+    summary: 'Get films',
     description:
-      'An array of Film objects or an empty array if no data can be found.',
+      'Returns a paginated list of films. Supports pagination and sorting query parameters.',
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid request error',
+  @ApiOkResponse({
+    description: 'An array of films or an empty array if no data can be found.',
+    type: GetFilmsResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'One or more query parameters are invalid.',
   })
   findAll(@Query() reqQuery: GetFilmsDto) {
     return this.filmsService.findAll(reqQuery);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filmsService.findOne(+id);
+  @Get(':slug')
+  @ApiOperation({
+    summary: 'Get one film by unique slug',
+    description:
+      'Returns a single film, including its related article, people, studios, and tags.',
+  })
+  @ApiOkResponse({
+    description: 'Object containing film and relations data.',
+    type: GetFilmResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'The slug parameter is invalid.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No film was found for the provided slug.',
+  })
+  findOne(@Param() reqParams: GetFilmDto) {
+    return this.filmsService.findOne(reqParams.slug);
   }
 }
