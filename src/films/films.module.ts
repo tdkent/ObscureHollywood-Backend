@@ -9,6 +9,7 @@ import { FilmTag } from 'src/films/entities/film-tag.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
 import { PersonFilm } from 'src/persons/entities/person-film.entity';
 import { Person } from 'src/persons/entities/person.entity';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Module({
   controllers: [FilmsController],
@@ -23,6 +24,6 @@ import { Person } from 'src/persons/entities/person.entity';
       Tag,
     ]),
   ],
-  providers: [FilmsService],
+  providers: [FilmsService, PaginationProvider],
 })
 export class FilmsModule {}
