@@ -11,10 +11,10 @@ export class PersonResponseDto {
   lastName: string;
 
   @ApiProperty({ example: '1897-02-19' })
-  birthYear: Date;
+  birthDate: Date;
 
   @ApiProperty({ example: '1931-02-22' })
-  deathYear: Date;
+  deathDate: Date;
 
   @ApiProperty({ example: 'San Francisco, California' })
   birthPlace: string;

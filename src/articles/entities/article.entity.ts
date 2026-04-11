@@ -13,6 +13,7 @@ import {
   Person,
   type Person as PersonType,
 } from 'src/persons/entities/person.entity';
+import { Exclude } from 'class-transformer';
 
 export enum Category {
   FEATURE = 'feature',
@@ -49,9 +50,11 @@ export class Article {
   textContent: string;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @OneToOne(() => Film, (film) => film.article)

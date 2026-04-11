@@ -1,8 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import {
   FilmTag,
   type FilmTag as FilmTagType,
 } from 'src/films/entities/film-tag.entity';
+import { Exclude } from 'class-transformer';
 
 enum Type {
   DECADE = 'decade',
@@ -34,6 +42,14 @@ export class Tag {
     enum: Type,
   })
   type: Type;
+
+  @CreateDateColumn()
+  @Exclude()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Exclude()
+  updatedAt: Date;
 
   @OneToMany(() => FilmTag, (filmTag) => filmTag.tag)
   filmTags: FilmTagType[];

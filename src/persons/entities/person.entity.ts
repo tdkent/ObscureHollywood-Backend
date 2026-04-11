@@ -16,6 +16,7 @@ import {
   PersonFilm,
   type PersonFilm as PersonFilmType,
 } from 'src/persons/entities/person-film.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Person {
@@ -45,13 +46,13 @@ export class Person {
     type: 'date',
     nullable: true,
   })
-  birthYear: number;
+  birthDate: Date;
 
   @Column({
     type: 'date',
     nullable: true,
   })
-  deathYear: number;
+  deathDate: Date;
 
   @Column({
     type: 'varchar',
@@ -68,9 +69,11 @@ export class Person {
   deathPlace: string;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @OneToOne(() => Article, (article) => article.person, {
