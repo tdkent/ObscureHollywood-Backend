@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 import { Repository } from 'typeorm';
 import { Feature } from 'src/features/entities/feature.entity';
@@ -13,10 +13,14 @@ export class FeaturesService {
     @InjectRepository(Feature)
     private featuresRepository: Repository<Feature>,
   ) {}
-  findAll(reqQuery: GetFeaturesDto) {
+
+  /**
+   * Send a list of features with pagination and sorting.
+   */
+  public async findAll(reqQuery: GetFeaturesDto) {
     const { limit, orderBy, page } = reqQuery;
 
-    const features = this.featuresRepository.find({
+    const features = await this.featuresRepository.find({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
       take: limit,
       skip: (page - 1) * limit,
@@ -25,7 +29,23 @@ export class FeaturesService {
     return features;
   }
 
-  findOne(slug: string) {
-    return `This action returns a feature with slug ${slug}`;
+  /**
+   * Send a single feature with relations.
+   */
+  public async findOne(slug: string) {
+    const feature = await this.featuresRepository.findOne({
+      where: { slug },
+      relations: {
+        article: {
+          incomingRelations: {
+            article: true,
+          },
+        },
+      },
+    });
+
+    if (!feature) throw new NotFoundException();
+
+    return feature;
   }
 }
