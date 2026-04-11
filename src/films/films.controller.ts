@@ -9,8 +9,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GetFilmDto } from 'src/films/dto/get-film.dto';
-import { FilmResponseDto } from 'src/films/dto/film-response.dto';
 import { GetFilmResponseDto } from 'src/films/dto/get-film-response.dto';
+import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
 
 @Controller('films')
 @ApiTags('films')
@@ -25,8 +25,7 @@ export class FilmsController {
   })
   @ApiOkResponse({
     description: 'An array of films or an empty array if no data can be found.',
-    type: FilmResponseDto,
-    isArray: true,
+    type: GetFilmsResponseDto,
   })
   @ApiBadRequestResponse({
     description: 'One or more query parameters are invalid.',
