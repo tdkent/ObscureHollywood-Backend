@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PersonsService } from './persons.service';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
+import { SlugDto } from 'src/common/dtos/slug.dto';
 
 @Controller('persons')
 export class PersonsController {
@@ -11,8 +12,8 @@ export class PersonsController {
     return this.personsService.findAll(reqQuery);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personsService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param() reqParams: SlugDto) {
+    return this.personsService.findOne(reqParams.slug);
   }
 }

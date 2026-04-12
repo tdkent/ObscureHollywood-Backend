@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
@@ -58,7 +58,23 @@ export class PersonsService {
     return finalResponse;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
+  public async findOne(slug: string) {
+    const person = await this.personsRepository.findOne({
+      where: { slug },
+      relations: {
+        article: {
+          incomingRelations: {
+            article: true,
+          },
+        },
+        personFilms: {
+          film: true,
+        },
+      },
+    });
+
+    if (!person) throw new NotFoundException();
+
+    return person;
   }
 }
