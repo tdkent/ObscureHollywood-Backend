@@ -43,6 +43,7 @@ export class CatchExceptionsFilter implements ExceptionFilter {
     }
 
     if (env === 'development') {
+      console.error(exception);
       console.log('New Request:', method, path, httpStatus);
     }
 

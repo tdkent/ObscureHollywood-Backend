@@ -17,8 +17,9 @@ export class PaginationProvider {
     limit,
     page,
     data,
+    count,
   }: CreatePaginationMetadataInputs<T>) {
-    const totalItems = await repository.count();
+    const totalItems = count ?? (await repository.count());
 
     const totalPages = Math.ceil(totalItems / limit);
     const nextPage = page >= totalPages ? totalPages : page + 1;
