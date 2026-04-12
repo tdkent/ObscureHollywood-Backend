@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilmsModule } from 'src/films/films.module';
 import { FeaturesModule } from './features/features.module';
 import { PaginationModule } from './common/pagination/pagination.module';
+import { PersonsModule } from './persons/persons.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { PaginationModule } from './common/pagination/pagination.module';
     FilmsModule,
     FeaturesModule,
     PaginationModule,
+    PersonsModule,
   ],
   providers: [
     /**
