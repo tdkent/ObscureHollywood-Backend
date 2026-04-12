@@ -5,6 +5,7 @@ import { Film } from 'src/films/entities/film.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { GetFilmsDto } from 'src/films/dto/get-films.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 describe('FilmsService', () => {
   let service: FilmsService;
@@ -24,6 +25,10 @@ describe('FilmsService', () => {
     get: jest.fn(),
   };
 
+  const mockPaginationProvider = {
+    createPaginationMetadata: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -35,6 +40,10 @@ describe('FilmsService', () => {
         {
           provide: ConfigService,
           useValue: mockConfigService,
+        },
+        {
+          provide: PaginationProvider,
+          useValue: mockPaginationProvider,
         },
       ],
     }).compile();
@@ -54,13 +63,11 @@ describe('FilmsService', () => {
   describe('findAll', () => {
     const query: GetFilmsDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
 
-    it('should call repository.count() and repository.find()', async () => {
-      repository.count.mockResolvedValue(0);
+    it('should call repository.find()', async () => {
       repository.find.mockResolvedValue([]);
 
       await service.findAll(query);
 
-      expect(repository.count).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -75,7 +82,17 @@ describe('FilmsService', () => {
       const films: Partial<Film>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
       repository.find.mockResolvedValue(films);
-      repository.count.mockResolvedValue(100);
+      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
+        data: films,
+        links: {
+          current: '',
+          first: '',
+        },
+        meta: {
+          currentPage: 1,
+          totalItems: 100,
+        },
+      });
 
       const result = await service.findAll(query);
 
@@ -88,7 +105,11 @@ describe('FilmsService', () => {
 
     it('should return an empty array if no data can be found', async () => {
       repository.find.mockResolvedValue([]);
-      repository.count.mockResolvedValue(0);
+      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
+        data: [],
+        links: {},
+        meta: {},
+      });
       const result = await service.findAll(query);
       expect(result.data).toEqual([]);
     });

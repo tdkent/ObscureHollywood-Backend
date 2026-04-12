@@ -8,6 +8,7 @@ import { CatchExceptionsFilter } from 'src/common/filters/catch-exception.filter
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilmsModule } from 'src/films/films.module';
 import { FeaturesModule } from './features/features.module';
+import { PaginationModule } from './common/pagination/pagination.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FeaturesModule } from './features/features.module';
     ArticlesModule,
     FilmsModule,
     FeaturesModule,
+    PaginationModule,
   ],
   providers: [
     /**

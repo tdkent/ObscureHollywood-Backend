@@ -3,6 +3,7 @@ import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 import { Repository } from 'typeorm';
 import { Feature } from 'src/features/entities/feature.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class FeaturesService {
@@ -12,6 +13,10 @@ export class FeaturesService {
      */
     @InjectRepository(Feature)
     private featuresRepository: Repository<Feature>,
+    /**
+     * Pagination provider
+     */
+    private paginationProvider: PaginationProvider,
   ) {}
 
   /**
@@ -26,7 +31,15 @@ export class FeaturesService {
       skip: (page - 1) * limit,
     });
 
-    return features;
+    const finalResponse =
+      await this.paginationProvider.createPaginationMetadata({
+        repository: this.featuresRepository,
+        limit,
+        page,
+        data: features,
+      });
+
+    return finalResponse;
   }
 
   /**
