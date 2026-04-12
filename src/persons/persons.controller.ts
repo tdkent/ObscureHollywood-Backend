@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { PersonsService } from './persons.service';
+import { PersonsService } from 'src/persons/providers/persons.service';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 

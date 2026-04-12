@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonsController } from './persons.controller';
-import { PersonsService } from './persons.service';
+import { PersonsService } from 'src/persons/providers/persons.service';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
 import { PaginatedResponse } from 'src/common/pagination/interfaces/paginated-response.interface';
 import { Person } from 'src/persons/entities/person.entity';
