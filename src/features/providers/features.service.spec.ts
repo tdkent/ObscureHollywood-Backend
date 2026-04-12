@@ -9,15 +9,14 @@ import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 describe('FeaturesService', () => {
   let service: FeaturesService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'find' | 'findOne' | 'count'>
+    Pick<Repository<Partial<Feature>>, 'find' | 'findOne'>
   >;
 
   const mockFeatureRepository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'find' | 'findOne' | 'count'>
+    Pick<Repository<Partial<Feature>>, 'find' | 'findOne'>
   > = {
     find: jest.fn(),
     findOne: jest.fn(),
-    count: jest.fn(),
   };
 
   const mockPaginationProvider = {
@@ -69,7 +68,7 @@ describe('FeaturesService', () => {
       });
     });
 
-    it('should return a count and an array of features', async () => {
+    it('should return features and pagination metadata', async () => {
       const features: Partial<Feature>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
       repository.find.mockResolvedValue(features);
