@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Feature } from 'src/features/entities/feature.entity';
 import { FeaturesService } from 'src/features/providers/features.service';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Repository } from 'typeorm';
 
 describe('FeaturesService', () => {
@@ -18,6 +19,10 @@ describe('FeaturesService', () => {
     count: jest.fn(),
   };
 
+  const mockPaginationProvider = {
+    createPaginationMetadata: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -25,6 +30,10 @@ describe('FeaturesService', () => {
         {
           provide: getRepositoryToken(Feature),
           useValue: mockFeatureRepository,
+        },
+        {
+          provide: PaginationProvider,
+          useValue: mockPaginationProvider,
         },
       ],
     }).compile();
