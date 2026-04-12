@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 
-export class ArticleResponseDto {
+class ArticleResponse {
   @ApiProperty({ example: 1 })
   id: number;
 
@@ -16,3 +16,16 @@ export class ArticleResponseDto {
   @ApiProperty({ example: 'Hello world!' })
   textContent: string;
 }
+
+class ArticleRelation {
+  @ApiProperty({ example: 2 })
+  id: number;
+
+  @ApiProperty({ type: [ArticleResponse] })
+  incomingRelations: ArticleResponse[];
+}
+
+export class ArticleResponseDto extends IntersectionType(
+  ArticleResponse,
+  ArticleRelation,
+) {}
