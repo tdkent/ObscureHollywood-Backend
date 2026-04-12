@@ -4,6 +4,7 @@ import { Feature } from 'src/features/entities/feature.entity';
 import { FeaturesService } from 'src/features/providers/features.service';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Repository } from 'typeorm';
+import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 
 describe('FeaturesService', () => {
   let service: FeaturesService;
@@ -24,6 +25,8 @@ describe('FeaturesService', () => {
   };
 
   beforeEach(async () => {
+    mockFeatureRepository.find.mockResolvedValue([]);
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FeaturesService,
@@ -47,7 +50,85 @@ describe('FeaturesService', () => {
   });
 
   it('should be defined', () => {
-    console.log(repository);
     expect(service).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    const query: GetFeaturesDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
+
+    it('should call repository.find()', async () => {
+      repository.find.mockResolvedValue([]);
+
+      await service.findAll(query);
+
+      expect(repository.find).toHaveBeenCalledTimes(1);
+      expect(repository.find).toHaveBeenCalledWith({
+        take: query.limit,
+        skip: (query.page - 1) * 10,
+        order: { name: 'ASC' },
+      });
+    });
+
+    it('should return a count and an array of features', async () => {
+      const features: Partial<Feature>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+      repository.find.mockResolvedValue(features);
+      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
+        data: features,
+        links: {
+          current: '',
+          first: '',
+        },
+        meta: {
+          currentPage: 1,
+          totalItems: 20,
+        },
+      });
+
+      const result = await service.findAll(query);
+
+      expect(result.data).toEqual(features);
+      expect(result.links.current).toBeDefined();
+      expect(result.links.first).toBeDefined();
+      expect(result.meta.currentPage).toBe(1);
+      expect(result.meta.totalItems).toEqual(20);
+    });
+
+    it('should return an empty array if no data can be found', async () => {
+      repository.find.mockResolvedValue([]);
+      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
+        data: [],
+        links: {},
+        meta: {},
+      });
+      const result = await service.findAll(query);
+      expect(result.data).toEqual([]);
+    });
+  });
+
+  describe('findOne', () => {
+    const params = { slug: 'corriganville' };
+    const mockFeature = { id: 1 };
+
+    it('should call repository.findOne()', async () => {
+      repository.findOne.mockResolvedValue(mockFeature);
+
+      await service.findOne(params.slug);
+
+      expect(repository.findOne).toHaveBeenCalledTimes(1);
+      expect(repository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { slug: params.slug },
+        }),
+      );
+    });
+
+    it('should return the feature', async () => {
+      repository.findOne.mockResolvedValue(mockFeature);
+
+      const result = await service.findOne(params.slug);
+
+      expect(result).toEqual(mockFeature);
+    });
   });
 });
