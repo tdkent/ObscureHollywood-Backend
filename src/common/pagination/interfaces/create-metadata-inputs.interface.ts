@@ -5,4 +5,5 @@ export interface CreatePaginationMetadataInputs<T extends ObjectLiteral> {
   limit: number;
   page: number;
   data: T[];
+  count?: number;
 }
