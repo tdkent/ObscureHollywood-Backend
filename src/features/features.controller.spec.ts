@@ -16,7 +16,7 @@ describe('FeaturesController', () => {
 
   beforeEach(async () => {
     mockFeaturesService.findAll.mockResolvedValue([]);
-    mockFeaturesService.findOne.mockRejectedValue(null);
+    mockFeaturesService.findOne.mockResolvedValue(null);
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FeaturesController],
@@ -74,10 +74,22 @@ describe('FeaturesController', () => {
   });
 
   describe('findOne', () => {
-    it('should call findOne service once', () => {});
+    const slug = 'corriganville';
+    it('should call findOne service once', async () => {
+      await service.findOne(slug);
+      expect(service.findOne).toHaveBeenCalledTimes(1);
+    });
 
-    it('should pass the slug to the findOne service', () => {});
+    it('should pass the slug to the findOne service', async () => {
+      await service.findOne(slug);
+      expect(service.findOne).toHaveBeenCalledWith(slug);
+    });
 
-    it('should return the feature feature', () => {});
+    it('should return the feature', async () => {
+      const feature = { id: 1 };
+      mockFeaturesService.findOne.mockResolvedValue(feature);
+      const result = await service.findOne(slug);
+      expect(result).toBe(feature);
+    });
   });
 });
