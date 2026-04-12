@@ -6,6 +6,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { GetFilmResponseDto } from 'src/films/dto/get-film-response.dto';
@@ -39,6 +40,11 @@ export class FilmsController {
     summary: 'Get one film by unique slug',
     description:
       'Returns a single film, including its related article, people, studios, and tags.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the film.',
+    example: 'the-americano-1916',
   })
   @ApiOkResponse({
     description: 'Object containing film and relations data.',

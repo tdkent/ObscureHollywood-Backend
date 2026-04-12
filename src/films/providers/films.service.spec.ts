@@ -10,15 +10,14 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 describe('FilmsService', () => {
   let service: FilmsService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'find' | 'findOne' | 'count'>
+    Pick<Repository<Partial<Film>>, 'find' | 'findOne'>
   >;
 
   const mockFilmRepository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'find' | 'findOne' | 'count'>
+    Pick<Repository<Partial<Film>>, 'find' | 'findOne'>
   > = {
     find: jest.fn(),
     findOne: jest.fn(),
-    count: jest.fn(),
   };
 
   const mockConfigService = {
@@ -78,7 +77,7 @@ describe('FilmsService', () => {
       );
     });
 
-    it('should return a count and an array of films', async () => {
+    it('should return films and pagination metadata', async () => {
       const films: Partial<Film>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
       repository.find.mockResolvedValue(films);
@@ -132,7 +131,7 @@ describe('FilmsService', () => {
       );
     });
 
-    it('should return an array with a single film', async () => {
+    it('should return the film', async () => {
       repository.findOne.mockResolvedValue(mockFilm);
 
       const result = await service.findOne(params.slug);
