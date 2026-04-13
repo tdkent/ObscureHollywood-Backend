@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TagResponseDto } from 'src/tag/dtos/tag-response.dto';
+import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
 
 class FilmTag {
   @ApiProperty({ example: 364 })

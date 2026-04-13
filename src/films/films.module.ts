@@ -6,7 +6,7 @@ import { Film } from 'src/films/entities/film.entity';
 import { Article } from 'src/articles/entities/article.entity';
 import { Studio } from 'src/studios/entities/studio.entity';
 import { FilmTag } from 'src/films/entities/film-tag.entity';
-import { Tag } from 'src/tag/entities/tag.entity';
+import { Tag } from 'src/tags/entities/tag-v1.entity';
 import { PersonFilm } from 'src/persons/entities/person-film.entity';
 import { Person } from 'src/persons/entities/person.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
