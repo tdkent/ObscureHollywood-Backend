@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
 
 @Injectable()
 export class TagsService {
-  findAll() {
-    return `This action returns all tags`;
+  findAll(reqQuery: GetTagsDto) {
+    return reqQuery;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tag`;
+  findOne(slug: string) {
+    return `This action returns a ${slug} tag`;
   }
 }

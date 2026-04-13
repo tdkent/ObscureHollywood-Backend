@@ -1,0 +1,12 @@
+### Find all tags with pagination queries
+# GET /tags
+# Sends an array of tags.
+GET {{localBaseUrl}}/tags
+?limit=10
+&page=1
+&orderBy=nameAsc
+
+### Find a single tag
+# GET /tags/:slug
+# Sends a single tag with relations
+GET {{localBaseUrl}}/tags/1930s
