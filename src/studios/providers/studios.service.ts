@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
@@ -38,7 +38,18 @@ export class StudiosService {
     return finalResponse;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} studio`;
+  public async findOne(slug: string) {
+    const studio = await this.studiosRepository.findOne({
+      where: {
+        slug,
+      },
+      relations: {
+        films: true,
+      },
+    });
+
+    if (!studio) throw new NotFoundException();
+
+    return studio;
   }
 }
