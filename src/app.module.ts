@@ -11,6 +11,7 @@ import { FeaturesModule } from './features/features.module';
 import { PaginationModule } from './common/pagination/pagination.module';
 import { PersonsModule } from './persons/persons.module';
 import { StudiosModule } from './studios/studios.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { StudiosModule } from './studios/studios.module';
     PaginationModule,
     PersonsModule,
     StudiosModule,
+    TagsModule,
   ],
   providers: [
     /**
