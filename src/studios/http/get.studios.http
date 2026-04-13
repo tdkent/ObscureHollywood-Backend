@@ -1,0 +1,12 @@
+### Find all studios with pagination queries
+# GET /studios
+# Sends an array of studios.
+GET {{localBaseUrl}}/studios
+?limit=10
+&page=1
+&orderBy=nameAsc
+
+### Find a single studio
+# GET /studios/:slug
+# Sends a single studio with relations
+GET {{localBaseUrl}}/studios/paramount-pictures

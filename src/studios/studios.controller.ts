@@ -1,13 +1,14 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { StudiosService } from './providers/studios.service';
+import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
 
 @Controller('studios')
 export class StudiosController {
   constructor(private readonly studiosService: StudiosService) {}
 
   @Get()
-  findAll() {
-    return this.studiosService.findAll();
+  findAll(@Query() reqQuery: GetStudiosDto) {
+    return this.studiosService.findAll(reqQuery);
   }
 
   @Get(':id')
