@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
@@ -45,7 +45,20 @@ export class TagsService {
     return finalResponse;
   }
 
-  findOne(slug: string) {
-    return `This action returns a ${slug} tag`;
+  public async findOne(slug: string) {
+    const tag = await this.tagsRepository.findOne({
+      where: {
+        slug,
+      },
+      relations: {
+        filmTags: {
+          film: true,
+        },
+      },
+    });
+
+    if (!tag) throw new NotFoundException();
+
+    return tag;
   }
 }

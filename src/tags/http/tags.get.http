@@ -9,4 +9,4 @@ GET {{localBaseUrl}}/tags
 ### Find a single tag
 # GET /tags/:slug
 # Sends a single tag with relations
-GET {{localBaseUrl}}/tags/1930s
+GET {{localBaseUrl}}/tags/decade-1930s
