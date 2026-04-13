@@ -10,6 +10,7 @@ import { FilmsModule } from 'src/films/films.module';
 import { FeaturesModule } from './features/features.module';
 import { PaginationModule } from './common/pagination/pagination.module';
 import { PersonsModule } from './persons/persons.module';
+import { StudiosModule } from './studios/studios.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { PersonsModule } from './persons/persons.module';
     FeaturesModule,
     PaginationModule,
     PersonsModule,
+    StudiosModule,
   ],
   providers: [
     /**
