@@ -33,8 +33,21 @@ export class FilmsService {
       orderBy === 'nameAsc' || orderBy === 'yearAsc' ? 'ASC' : 'DESC';
 
     let films: Film[];
+    let count: number | undefined;
 
     if (tags) {
+      const rows = await this.filmsRepository
+        .createQueryBuilder('film')
+        .innerJoin('film.filmTags', 'filmTag')
+        .innerJoin('filmTag.tag', 'tag')
+        .where('tag.slug IN (:...tags)', { tags })
+        .groupBy('film.id')
+        .addGroupBy('film.slug')
+        .having('COUNT(*) = :count', { count: tags.length })
+        .getMany();
+
+      count = rows.length;
+
       films = await this.filmsRepository
         .createQueryBuilder('film')
         .innerJoin('film.filmTags', 'filmTag')
@@ -62,6 +75,7 @@ export class FilmsService {
         limit,
         page,
         data: films,
+        count,
       });
 
     return finalResponse;
