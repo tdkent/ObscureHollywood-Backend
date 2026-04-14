@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Film, type Film as FilmType } from 'src/films/entities/film.entity';
-import { Tag, type Tag as TagType } from 'src/tag/entities/tag.entity';
+import { Tag, type Tag as TagType } from 'src/tags/entities/tag.entity';
 
 @Entity()
 @Unique(['film', 'tag'])
