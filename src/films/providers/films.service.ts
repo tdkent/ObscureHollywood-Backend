@@ -23,20 +23,51 @@ export class FilmsService {
    * Send a list of films with pagination and sorting.
    */
   public async findAll(reqQuery: GetFilmsDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const { limit, orderBy, page, tag: tags } = reqQuery;
 
-    const films = await this.filmsRepository.find({
-      order:
-        orderBy === 'nameDesc'
-          ? { sortName: 'DESC', releaseYear: 'ASC' }
-          : orderBy === 'yearAsc'
-            ? { releaseYear: 'ASC', sortName: 'ASC' }
-            : orderBy === 'yearDesc'
-              ? { releaseYear: 'DESC', sortName: 'ASC' }
-              : { sortName: 'ASC', releaseYear: 'ASC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const sortField =
+      orderBy === 'nameAsc' || orderBy === 'nameDesc'
+        ? 'film.sortName'
+        : 'film.releaseYear';
+    const sortDirection =
+      orderBy === 'nameAsc' || orderBy === 'yearAsc' ? 'ASC' : 'DESC';
+
+    let films: Film[];
+    let count: number | undefined;
+
+    if (tags) {
+      const rows = await this.filmsRepository
+        .createQueryBuilder('film')
+        .innerJoin('film.filmTags', 'filmTag')
+        .innerJoin('filmTag.tag', 'tag')
+        .where('tag.slug IN (:...tags)', { tags })
+        .groupBy('film.id')
+        .addGroupBy('film.slug')
+        .having('COUNT(*) = :count', { count: tags.length })
+        .getMany();
+
+      count = rows.length;
+
+      films = await this.filmsRepository
+        .createQueryBuilder('film')
+        .innerJoin('film.filmTags', 'filmTag')
+        .innerJoin('filmTag.tag', 'tag')
+        .where('tag.slug IN (:...tags)', { tags })
+        .groupBy('film.id')
+        .addGroupBy('film.slug')
+        .having('COUNT(*) = :count', { count: tags.length })
+        .orderBy(sortField, sortDirection)
+        .take(limit)
+        .skip((page - 1) * limit)
+        .getMany();
+    } else {
+      films = await this.filmsRepository
+        .createQueryBuilder('film')
+        .orderBy(sortField, sortDirection)
+        .take(limit)
+        .skip((page - 1) * limit)
+        .getMany();
+    }
 
     const finalResponse =
       await this.paginationProvider.createPaginationMetadata({
@@ -44,6 +75,7 @@ export class FilmsService {
         limit,
         page,
         data: films,
+        count,
       });
 
     return finalResponse;
