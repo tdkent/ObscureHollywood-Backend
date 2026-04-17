@@ -19,6 +19,14 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   /**
+   * CORS
+   */
+  app.enableCors({
+    origin: [process.env.FRONTEND_DEV_URL],
+    methods: ['GET'],
+  });
+
+  /**
    * Validation Pipes
    */
   app.useGlobalPipes(
