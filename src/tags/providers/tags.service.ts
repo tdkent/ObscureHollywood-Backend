@@ -38,6 +38,7 @@ export class TagsService {
       await this.paginationProvider.createPaginationMetadata({
         repository: this.tagsRepository,
         limit,
+        orderBy,
         page,
         data: tags,
       });

@@ -35,6 +35,7 @@ export class FeaturesService {
       await this.paginationProvider.createPaginationMetadata({
         repository: this.featuresRepository,
         limit,
+        orderBy,
         page,
         data: features,
       });

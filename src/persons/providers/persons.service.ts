@@ -50,6 +50,7 @@ export class PersonsService {
       await this.paginationProvider.createPaginationMetadata({
         repository: this.personsRepository,
         limit,
+        orderBy,
         page,
         data: persons,
         count,

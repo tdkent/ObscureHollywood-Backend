@@ -31,6 +31,7 @@ export class StudiosService {
       await this.paginationProvider.createPaginationMetadata({
         repository: this.studiosRepository,
         limit,
+        orderBy,
         page,
         data: studios,
       });
