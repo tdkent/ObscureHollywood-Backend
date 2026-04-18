@@ -14,13 +14,25 @@ export class PaginationProvider {
     data,
     count,
   }: CreatePaginationMetadataInputs<T>) {
+    /**
+     * Calculate items metadata
+     */
     const totalItems = count ?? (await repository.count());
+    const firstItemOnPage = (page - 1) * limit + 1;
+    const lastItemOnPage =
+      page * limit < totalItems ? page * limit : totalItems;
 
+    /**
+     * Calculate pages metadata
+     */
     const totalPages = Math.ceil(totalItems / limit);
     const nextPage = page >= totalPages ? totalPages : page + 1;
     const prevPage =
       page >= totalPages ? totalPages - 1 : page <= 1 ? 1 : page - 1;
 
+    /**
+     * Query string w/o page params
+     */
     const nonPageParams = `&limit=${limit}&orderBy=${orderBy}`;
 
     /**
@@ -33,6 +45,8 @@ export class PaginationProvider {
         totalItems,
         currentPage: page,
         totalPages,
+        firstItemOnPage,
+        lastItemOnPage,
       },
       links: {
         first: `page=1${nonPageParams}`,
