@@ -73,6 +73,7 @@ export class FilmsService {
       await this.paginationProvider.createPaginationMetadata({
         repository: this.filmsRepository,
         limit,
+        orderBy,
         page,
         data: films,
         count,
