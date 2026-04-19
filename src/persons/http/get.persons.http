@@ -1,12 +1,12 @@
 ### Find all persons with pagination queries
-# GET /persons
+# GET /people
 # Sends an array of persons.
-GET {{localBaseUrl}}/persons
+GET {{localBaseUrl}}/people
 ?limit=10
 &page=1
 &orderBy=lastNameAsc
 
 ### Find a single person
-# GET /persons/:slug
+# GET /people/:slug
 # Sends a single film with relations
-GET {{localBaseUrl}}/persons/ray-crash-corrigan
+GET {{localBaseUrl}}/people/ray-crash-corrigan
