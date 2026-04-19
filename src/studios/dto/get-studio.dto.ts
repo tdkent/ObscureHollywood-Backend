@@ -8,7 +8,7 @@ class GetStudiosBaseDto {
     example: 'nameAsc',
   })
   @IsIn(['nameAsc', 'nameDesc'])
-  orderBy: 'nameAsc' | 'nameDesc';
+  orderBy: 'nameAsc' | 'nameDesc' = 'nameAsc';
 }
 
 export class GetStudiosDto extends IntersectionType(

@@ -8,7 +8,8 @@ class GetPersonsBaseDto {
     example: 'lastNameAsc',
   })
   @IsIn(['firstNameAsc', 'firstNameDesc', 'lastNameAsc', 'lastNameDesc'])
-  orderBy: 'firstNameAsc' | 'firstNameDesc' | 'lastNameAsc' | 'lastNameDesc';
+  orderBy: 'firstNameAsc' | 'firstNameDesc' | 'lastNameAsc' | 'lastNameDesc' =
+    'lastNameAsc';
 }
 
 export class GetPersonsDto extends IntersectionType(
