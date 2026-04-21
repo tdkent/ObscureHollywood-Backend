@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 import { GetTagResponseDto } from 'src/tags/dto/get-tag-response.dto';
-import { GetTagsResponseDto } from 'src/tags/dto/get-tags-response.dto';
+import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
 import { TagsService } from 'src/tags/providers/tags.service';
 
 @Controller('tags')
@@ -24,7 +24,7 @@ export class TagsController {
   })
   @ApiOkResponse({
     description: 'An array of tags or an empty array if no data can be found.',
-    type: GetTagsResponseDto,
+    type: [TagResponseDto],
   })
   findAll() {
     return this.tagsService.findAll();
