@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TagsController } from './tags.controller';
 import { TagsService } from 'src/tags/providers/tags.service';
-import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
-import { PaginatedResponse } from 'src/common/pagination/interfaces/paginated-response.interface';
-import { Tag } from 'src/tags/entities/tag.entity';
 
 describe('TagsController', () => {
   let controller: TagsController;
@@ -41,35 +38,26 @@ describe('TagsController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetTagsDto = { limit: 10, page: 1, orderBy: 'nameAsc' };
-
     it('should call findAll service once', async () => {
-      await service.findAll(query);
+      await service.findAll();
       expect(service.findAll).toHaveBeenCalledTimes(1);
-    });
-
-    it('should pass query params to findAll service', async () => {
-      await service.findAll(query);
-      expect(service.findAll).toHaveBeenCalledWith(query);
     });
 
     it('should return an array of tags', async () => {
       const tags = [{ id: 1 }, { id: 2 }, { id: 3 }];
-      const response: Partial<PaginatedResponse<Partial<Tag>>> = {
-        data: tags,
-      };
-      mockTagsService.findAll.mockResolvedValue(response);
-      const result = await service.findAll(query);
-      expect(result.data).toBe(tags);
+      mockTagsService.findAll.mockResolvedValue(tags);
+
+      const data = await service.findAll();
+
+      expect(data).toBe(tags);
     });
 
     it('should return an empty array if no data can be found', async () => {
-      const response: Partial<PaginatedResponse<Partial<Tag>>> = {
-        data: [],
-      };
-      mockTagsService.findAll.mockResolvedValue(response);
-      const result = await service.findAll(query);
-      expect(result.data).toEqual([]);
+      mockTagsService.findAll.mockResolvedValue([]);
+
+      const data = await service.findAll();
+
+      expect(data).toEqual([]);
     });
   });
 
