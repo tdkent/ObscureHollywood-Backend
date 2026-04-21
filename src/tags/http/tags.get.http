@@ -2,9 +2,6 @@
 # GET /tags
 # Sends an array of tags.
 GET {{localBaseUrl}}/tags
-?limit=10
-&page=1
-&orderBy=nameAsc
 
 ### Find a single tag
 # GET /tags/:slug
