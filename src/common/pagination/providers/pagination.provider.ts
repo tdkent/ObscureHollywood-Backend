@@ -13,6 +13,7 @@ export class PaginationProvider {
     page,
     data,
     count,
+    tags,
   }: CreatePaginationMetadataInputs<T>) {
     /**
      * Calculate items metadata
@@ -34,6 +35,7 @@ export class PaginationProvider {
      * Query string w/o page params
      */
     const nonPageParams = `&limit=${limit}&orderBy=${orderBy}`;
+    const tagParams = tags && tags.length ? `&tag=${tags.join('&tag=')}` : '';
 
     /**
      * Response object with pagination metadata.
@@ -49,11 +51,11 @@ export class PaginationProvider {
         lastItemOnPage,
       },
       links: {
-        first: `page=1${nonPageParams}`,
-        last: `page=${totalPages}${nonPageParams}`,
-        current: `page=${page}${nonPageParams}`,
-        next: `page=${nextPage}${nonPageParams}`,
-        previous: `page=${prevPage}${nonPageParams}`,
+        first: `page=1${nonPageParams}${tagParams}`,
+        last: `page=${totalPages}${nonPageParams}${tagParams}`,
+        current: `page=${page}${nonPageParams}${tagParams}`,
+        next: `page=${nextPage}${nonPageParams}${tagParams}`,
+        previous: `page=${prevPage}${nonPageParams}${tagParams}`,
       },
     };
 
