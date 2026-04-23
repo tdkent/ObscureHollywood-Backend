@@ -12,9 +12,6 @@ class ArticleResponse {
 
   @ApiProperty({ example: '<article>Hello world!</article>' })
   htmlContent: string;
-
-  @ApiProperty({ example: 'Hello world!' })
-  textContent: string;
 }
 
 class ArticleRelation {

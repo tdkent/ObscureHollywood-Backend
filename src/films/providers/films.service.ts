@@ -77,6 +77,7 @@ export class FilmsService {
         page,
         data: films,
         count,
+        tags,
       });
 
     return finalResponse;

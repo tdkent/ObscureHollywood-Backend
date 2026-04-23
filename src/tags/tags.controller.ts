@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
@@ -9,8 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 import { GetTagResponseDto } from 'src/tags/dto/get-tag-response.dto';
-import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
-import { GetTagsResponseDto } from 'src/tags/dto/get-tags-response.dto';
+import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
 import { TagsService } from 'src/tags/providers/tags.service';
 
 @Controller('tags')
@@ -21,18 +20,14 @@ export class TagsController {
   @Get()
   @ApiOperation({
     summary: 'Get tags',
-    description:
-      'Returns a paginated list of tags. Supports pagination and sorting query parameters.',
+    description: 'Returns a list of all tags sorted by type and name.',
   })
   @ApiOkResponse({
     description: 'An array of tags or an empty array if no data can be found.',
-    type: GetTagsResponseDto,
+    type: [TagResponseDto],
   })
-  @ApiBadRequestResponse({
-    description: 'One or more query parameters are invalid.',
-  })
-  findAll(@Query() reqQuery: GetTagsDto) {
-    return this.tagsService.findAll(reqQuery);
+  findAll() {
+    return this.tagsService.findAll();
   }
 
   @Get(':slug')

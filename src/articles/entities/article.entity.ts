@@ -47,6 +47,7 @@ export class Article {
   @Column({
     type: 'text',
   })
+  @Exclude()
   textContent: string;
 
   @CreateDateColumn()

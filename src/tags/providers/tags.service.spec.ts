@@ -3,8 +3,6 @@ import { TagsService } from 'src/tags/providers/tags.service';
 import { Repository } from 'typeorm';
 import { Tag } from 'src/tags/entities/tag.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
 
 describe('TagsService', () => {
   let service: TagsService;
@@ -19,10 +17,6 @@ describe('TagsService', () => {
     findOne: jest.fn(),
   };
 
-  const mockPaginationProvider = {
-    createPaginationMetadata: jest.fn(),
-  };
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -30,10 +24,6 @@ describe('TagsService', () => {
         {
           provide: getRepositoryToken(Tag),
           useValue: mockTagRepository,
-        },
-        {
-          provide: PaginationProvider,
-          useValue: mockPaginationProvider,
         },
       ],
     }).compile();
@@ -51,59 +41,27 @@ describe('TagsService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetTagsDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
-
     it('should call repository.find()', async () => {
       repository.find.mockResolvedValue([]);
 
-      await service.findAll(query);
+      await service.findAll();
 
       expect(repository.find).toHaveBeenCalledTimes(1);
-
-      expect(repository.find).toHaveBeenCalledWith(
-        expect.objectContaining({
-          take: query.limit,
-          skip: (query.page - 1) * 10,
-          order: { name: 'ASC', type: 'ASC' },
-        }),
-      );
     });
 
-    it('should return studios and pagination metadata', async () => {
-      const studios: Partial<Tag>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
+    it('should return tags and pagination metadata', async () => {
+      const tags: Partial<Tag>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
+      repository.find.mockResolvedValue(tags);
 
-      repository.find.mockResolvedValue(studios);
+      const data = await service.findAll();
 
-      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
-        data: studios,
-        links: {
-          current: '',
-          first: '',
-        },
-        meta: {
-          currentPage: 1,
-          totalItems: 35,
-        },
-      });
-
-      const result = await service.findAll(query);
-
-      expect(result.data).toEqual(studios);
-      expect(result.links.current).toBeDefined();
-      expect(result.links.first).toBeDefined();
-      expect(result.meta.currentPage).toBe(1);
-      expect(result.meta.totalItems).toEqual(35);
+      expect(data).toEqual(tags);
     });
 
     it('should return an empty array if no data can be found', async () => {
       repository.find.mockResolvedValue([]);
-      mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
-        data: [],
-        links: {},
-        meta: {},
-      });
-      const result = await service.findAll(query);
-      expect(result.data).toEqual([]);
+      const data = await service.findAll();
+      expect(data).toEqual([]);
     });
   });
 
