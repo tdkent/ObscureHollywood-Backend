@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 
-class ArticleResponse {
+export class ArticleResponse {
   @ApiProperty({ example: 1 })
   id: number;
 
