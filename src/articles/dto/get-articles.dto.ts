@@ -18,7 +18,7 @@ class GetArticlesBaseDto {
 
   @IsOptional()
   @IsString()
-  @MinLength(1)
+  @MinLength(3)
   @MaxLength(64)
   searchString?: string;
 }
