@@ -113,6 +113,7 @@ export class ArticlesService {
       limit,
       orderBy,
       page,
+      searchString,
       totalItems,
     });
 
