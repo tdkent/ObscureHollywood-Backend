@@ -40,21 +40,19 @@ export class PersonsService {
       skip: (page - 1) * limit,
     });
 
-    const count = await this.personsRepository.count({
+    const totalItems = await this.personsRepository.count({
       where: {
         article: Not(IsNull()),
       },
     });
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.personsRepository,
-        limit,
-        orderBy,
-        page,
-        data: persons,
-        count,
-      });
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: persons,
+      limit,
+      orderBy,
+      page,
+      totalItems,
+    });
 
     return finalResponse;
   }

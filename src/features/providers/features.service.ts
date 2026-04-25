@@ -31,14 +31,15 @@ export class FeaturesService {
       skip: (page - 1) * limit,
     });
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.featuresRepository,
-        limit,
-        orderBy,
-        page,
-        data: features,
-      });
+    const totalItems = await this.featuresRepository.count();
+
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      limit,
+      orderBy,
+      page,
+      data: features,
+      totalItems,
+    });
 
     return finalResponse;
   }

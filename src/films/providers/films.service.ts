@@ -33,9 +33,10 @@ export class FilmsService {
       orderBy === 'nameAsc' || orderBy === 'yearAsc' ? 'ASC' : 'DESC';
 
     let films: Film[];
-    let count: number | undefined;
+    let totalItems: number;
 
     if (tags) {
+      //? Combine into a single query with window function to get count?
       const rows = await this.filmsRepository
         .createQueryBuilder('film')
         .innerJoin('film.filmTags', 'filmTag')
@@ -46,7 +47,7 @@ export class FilmsService {
         .having('COUNT(*) = :count', { count: tags.length })
         .getMany();
 
-      count = rows.length;
+      totalItems = rows.length;
 
       films = await this.filmsRepository
         .createQueryBuilder('film')
@@ -67,18 +68,18 @@ export class FilmsService {
         .take(limit)
         .skip((page - 1) * limit)
         .getMany();
+
+      totalItems = await this.filmsRepository.count();
     }
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.filmsRepository,
-        limit,
-        orderBy,
-        page,
-        data: films,
-        count,
-        tags,
-      });
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: films,
+      limit,
+      orderBy,
+      page,
+      tags,
+      totalItems,
+    });
 
     return finalResponse;
   }
