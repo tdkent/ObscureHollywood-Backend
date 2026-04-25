@@ -9,12 +9,13 @@ import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 describe('FeaturesService', () => {
   let service: FeaturesService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'find' | 'findOne'>
+    Pick<Repository<Partial<Feature>>, 'count' | 'find' | 'findOne'>
   >;
 
   const mockFeatureRepository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'find' | 'findOne'>
+    Pick<Repository<Partial<Feature>>, 'count' | 'find' | 'findOne'>
   > = {
+    count: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
   };
@@ -24,6 +25,7 @@ describe('FeaturesService', () => {
   };
 
   beforeEach(async () => {
+    mockFeatureRepository.count.mockResolvedValue(0);
     mockFeatureRepository.find.mockResolvedValue([]);
 
     const module: TestingModule = await Test.createTestingModule({
@@ -55,10 +57,10 @@ describe('FeaturesService', () => {
   describe('findAll', () => {
     const query: GetFeaturesDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
 
-    it('should call repository.find()', async () => {
-      repository.find.mockResolvedValue([]);
-
+    it('should call repository.count() and repository.find()', async () => {
       await service.findAll(query);
+
+      expect(repository.count).toHaveBeenCalledTimes(1);
 
       expect(repository.find).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledWith({
@@ -71,7 +73,9 @@ describe('FeaturesService', () => {
     it('should return features and pagination metadata', async () => {
       const features: Partial<Feature>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
+      repository.count.mockResolvedValue(20);
       repository.find.mockResolvedValue(features);
+
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: features,
         links: {

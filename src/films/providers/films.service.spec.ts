@@ -10,7 +10,7 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 describe('FilmsService', () => {
   let service: FilmsService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'createQueryBuilder' | 'findOne'>
+    Pick<Repository<Partial<Film>>, 'count' | 'createQueryBuilder' | 'findOne'>
   >;
 
   // Mock createQueryBuilder object and all methods used in service
@@ -27,8 +27,9 @@ describe('FilmsService', () => {
   } as unknown as SelectQueryBuilder<Partial<Film>>;
 
   const mockFilmRepository: jest.Mocked<
-    Pick<Repository<Partial<Film>>, 'createQueryBuilder' | 'findOne'>
+    Pick<Repository<Partial<Film>>, 'count' | 'createQueryBuilder' | 'findOne'>
   > = {
+    count: jest.fn(),
     findOne: jest.fn(),
     createQueryBuilder: jest.fn(() => mockQueryBuilder),
   };
@@ -42,6 +43,7 @@ describe('FilmsService', () => {
   };
 
   beforeEach(async () => {
+    mockFilmRepository.count.mockResolvedValue(0);
     (mockQueryBuilder.getMany as jest.Mock).mockResolvedValue([
       { id: 1 },
       { id: 2 },
@@ -80,7 +82,11 @@ describe('FilmsService', () => {
     const query: GetFilmsDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
 
     it('should call repository.createQueryBuilder', async () => {
+      mockFilmRepository.count.mockResolvedValue(100);
+
       await service.findAll(query);
+
+      expect(repository.count).toHaveBeenCalledTimes(1);
       expect(repository.createQueryBuilder).toHaveBeenCalledTimes(1);
     });
 
