@@ -43,6 +43,12 @@ export class Person {
   lastName: string;
 
   @Column({
+    type: 'varchar',
+    length: 64,
+  })
+  name: string;
+
+  @Column({
     type: 'date',
     nullable: true,
   })

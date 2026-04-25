@@ -9,12 +9,13 @@ import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
 describe('StudiosService', () => {
   let service: StudiosService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Studio>>, 'find' | 'findOne'>
+    Pick<Repository<Partial<Studio>>, 'count' | 'find' | 'findOne'>
   >;
 
   const mockStudioRepository: jest.Mocked<
-    Pick<Repository<Partial<Studio>>, 'find' | 'findOne'>
+    Pick<Repository<Partial<Studio>>, 'count' | 'find' | 'findOne'>
   > = {
+    count: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
   };
@@ -24,6 +25,9 @@ describe('StudiosService', () => {
   };
 
   beforeEach(async () => {
+    mockStudioRepository.count.mockResolvedValue(0);
+    mockStudioRepository.find.mockResolvedValue([]);
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StudiosService,
@@ -50,10 +54,9 @@ describe('StudiosService', () => {
     const query: GetStudiosDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
 
     it('should call repository.find()', async () => {
-      repository.find.mockResolvedValue([]);
-
       await service.findAll(query);
 
+      expect(repository.count).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledTimes(1);
 
       expect(repository.find).toHaveBeenCalledWith(
@@ -68,7 +71,8 @@ describe('StudiosService', () => {
     it('should return studios and pagination metadata', async () => {
       const studios: Partial<Studio>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-      repository.find.mockResolvedValue(studios);
+      mockStudioRepository.count.mockResolvedValue(35);
+      mockStudioRepository.find.mockResolvedValue(studios);
 
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: studios,
@@ -92,7 +96,6 @@ describe('StudiosService', () => {
     });
 
     it('should return an empty array if no data can be found', async () => {
-      repository.find.mockResolvedValue([]);
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: [],
         links: {},

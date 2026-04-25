@@ -6,19 +6,17 @@ import { CreatePaginationMetadataInputs } from 'src/common/pagination/interfaces
 @Injectable()
 export class PaginationProvider {
   constructor() {}
-  public async createPaginationMetadata<T extends ObjectLiteral>({
-    repository,
+  public createPaginationMetadata<T extends ObjectLiteral>({
     limit,
     orderBy,
     page,
     data,
-    count,
+    totalItems,
     tags,
   }: CreatePaginationMetadataInputs<T>) {
     /**
      * Calculate items metadata
      */
-    const totalItems = count ?? (await repository.count());
     const firstItemOnPage = (page - 1) * limit + 1;
     const lastItemOnPage =
       page * limit < totalItems ? page * limit : totalItems;

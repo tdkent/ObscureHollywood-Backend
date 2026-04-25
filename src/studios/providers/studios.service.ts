@@ -27,14 +27,15 @@ export class StudiosService {
       skip: (page - 1) * limit,
     });
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.studiosRepository,
-        limit,
-        orderBy,
-        page,
-        data: studios,
-      });
+    const totalItems = await this.studiosRepository.count();
+
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: studios,
+      limit,
+      orderBy,
+      page,
+      totalItems,
+    });
 
     return finalResponse;
   }

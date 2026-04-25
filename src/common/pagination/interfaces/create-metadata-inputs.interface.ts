@@ -1,11 +1,10 @@
-import { ObjectLiteral, Repository } from 'typeorm';
+import { ObjectLiteral } from 'typeorm';
 
 export interface CreatePaginationMetadataInputs<T extends ObjectLiteral> {
-  repository: Repository<T>;
+  data: T[];
   limit: number;
   orderBy: string;
   page: number;
-  data: T[];
-  count?: number;
   tags?: string[];
+  totalItems: number;
 }
