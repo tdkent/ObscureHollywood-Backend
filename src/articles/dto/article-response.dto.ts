@@ -4,6 +4,9 @@ export class ArticleResponse {
   @ApiProperty({ example: 1 })
   id: number;
 
+  @ApiProperty({ example: 'The Americano' })
+  name: string;
+
   @ApiProperty({ example: 'the-americano-1916' })
   slug: string;
 
