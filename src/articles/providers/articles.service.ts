@@ -82,13 +82,13 @@ export class ArticlesService {
         .addSelect('s."htmlContent"')
         .addSelect('COUNT(*) OVER() as count') // Get total row count w/o grouping
         .from('search', 's') // Same as `FROM search AS s`
-        .orderBy('name', sortDirection)
-        .take(limit)
-        .skip((page - 1) * limit)
         .where(
           's.name ILIKE :searchString OR s."textContent" ILIKE :searchString',
           { searchString: `%${searchString}%` },
         )
+        .orderBy('name', sortDirection)
+        .take(limit)
+        .skip((page - 1) * limit)
         .getRawMany();
 
       const results = searchResultsQb as (ArticleResponse & {
