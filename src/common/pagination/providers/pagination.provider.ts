@@ -7,10 +7,11 @@ import { CreatePaginationMetadataInputs } from 'src/common/pagination/interfaces
 export class PaginationProvider {
   constructor() {}
   public createPaginationMetadata<T extends ObjectLiteral>({
+    data,
     limit,
     orderBy,
     page,
-    data,
+    searchString,
     totalItems,
     tags,
   }: CreatePaginationMetadataInputs<T>) {
@@ -33,6 +34,7 @@ export class PaginationProvider {
      * Query string w/o page params
      */
     const nonPageParams = `&limit=${limit}&orderBy=${orderBy}`;
+    const searchParam = searchString ? `&searchString=${searchString}` : '';
     const tagParams = tags && tags.length ? `&tag=${tags.join('&tag=')}` : '';
 
     /**
@@ -49,11 +51,11 @@ export class PaginationProvider {
         lastItemOnPage,
       },
       links: {
-        first: `page=1${nonPageParams}${tagParams}`,
-        last: `page=${totalPages}${nonPageParams}${tagParams}`,
-        current: `page=${page}${nonPageParams}${tagParams}`,
-        next: `page=${nextPage}${nonPageParams}${tagParams}`,
-        previous: `page=${prevPage}${nonPageParams}${tagParams}`,
+        first: `page=1${nonPageParams}${searchParam}${tagParams}`,
+        last: `page=${totalPages}${nonPageParams}${searchParam}${tagParams}`,
+        current: `page=${page}${nonPageParams}${searchParam}${tagParams}`,
+        next: `page=${nextPage}${nonPageParams}${searchParam}${tagParams}`,
+        previous: `page=${prevPage}${nonPageParams}${searchParam}${tagParams}`,
       },
     };
 
