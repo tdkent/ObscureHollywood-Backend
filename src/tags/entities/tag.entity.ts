@@ -43,6 +43,12 @@ export class Tag {
   })
   type: Type;
 
+  @Column({
+    type: 'varchar',
+    length: 240,
+  })
+  description: string;
+
   @CreateDateColumn()
   @Exclude()
   createdAt: Date;

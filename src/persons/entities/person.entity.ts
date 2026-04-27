@@ -61,6 +61,12 @@ export class Person {
   deathDate: Date;
 
   @Column({
+    type: 'smallint',
+    nullable: true,
+  })
+  age: number;
+
+  @Column({
     type: 'varchar',
     length: 64,
     nullable: true,
