@@ -15,6 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { GetStudiosResponseDto } from 'src/studios/dto/get-studios-response.dto';
 import { GetStudioResponseDto } from 'src/studios/dto/get-studio-response.dto';
+import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
 
 @Controller('studios')
 @ApiTags('studios')
@@ -64,6 +65,23 @@ export class StudiosController {
   }
 
   @Get(':slug/films')
+  @ApiOperation({
+    summary: 'Get films by studio',
+    description:
+      'Returns a paginated list of films. Supports pagination and sorting query parameters.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the studio.',
+    example: 'paramount-pictures',
+  })
+  @ApiOkResponse({
+    description: 'An array of films or an empty array if no data can be found.',
+    type: GetFilmsResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Slug parameter or one or more query parameters are invalid.',
+  })
   findFilmsByStudio(
     @Param() reqParams: SlugDto,
     @Query() reqQuery: GetFilmsByStudioDto,

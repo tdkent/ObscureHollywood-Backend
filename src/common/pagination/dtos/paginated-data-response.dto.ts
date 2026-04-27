@@ -12,6 +12,12 @@ class PaginationMetaDto {
 
   @ApiProperty({ example: 18 })
   totalPages: number;
+
+  @ApiProperty({ example: 1 })
+  firstItemOnPage: number;
+
+  @ApiProperty({ example: 10 })
+  lastItemOnPage: number;
 }
 
 class PaginationLinksDto {

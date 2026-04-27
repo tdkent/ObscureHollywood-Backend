@@ -8,6 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { SlugDto } from 'src/common/dtos/slug.dto';
+import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
 import { GetTagResponseDto } from 'src/tags/dto/get-tag-response.dto';
 import { GetFilmsByTagDto } from 'src/tags/dto/get-tag.dto';
 import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
@@ -56,6 +57,23 @@ export class TagsController {
   }
 
   @Get(':slug/films')
+  @ApiOperation({
+    summary: 'Get films by tag',
+    description:
+      'Returns a paginated list of films. Supports pagination and sorting query parameters.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the tag.',
+    example: 'decade-1930s',
+  })
+  @ApiOkResponse({
+    description: 'An array of films or an empty array if no data can be found.',
+    type: GetFilmsResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Slug parameter or one or more query parameters are invalid.',
+  })
   findFilmsByTag(
     @Param() reqParams: SlugDto,
     @Query() reqQuery: GetFilmsByTagDto,
