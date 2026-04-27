@@ -15,3 +15,6 @@ GET {{localBaseUrl}}/studios/paramount-pictures
 # GET /studios/:slug/films
 # Sends an array of films.
 GET {{localBaseUrl}}/studios/paramount-pictures/films
+?limit=25
+&page=1
+&orderBy=yearAsc
