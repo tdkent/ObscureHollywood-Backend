@@ -1,6 +1,9 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { StudiosService } from './providers/studios.service';
-import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
+import {
+  GetFilmsByStudioDto,
+  GetStudiosDto,
+} from 'src/studios/dto/get-studio.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 import {
   ApiBadRequestResponse,
@@ -56,7 +59,15 @@ export class StudiosController {
   @ApiNotFoundResponse({
     description: 'No studio was found for the provided slug.',
   })
-  findOne(@Param() regParams: SlugDto) {
-    return this.studiosService.findOne(regParams.slug);
+  findOne(@Param() reqParams: SlugDto) {
+    return this.studiosService.findOne(reqParams.slug);
+  }
+
+  @Get(':slug/films')
+  findFilmsByStudio(
+    @Param() reqParams: SlugDto,
+    @Query() reqQuery: GetFilmsByStudioDto,
+  ) {
+    return this.studiosService.findFilmsByStudio(reqParams.slug, reqQuery);
   }
 }

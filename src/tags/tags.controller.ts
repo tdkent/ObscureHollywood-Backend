@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 import { GetTagResponseDto } from 'src/tags/dto/get-tag-response.dto';
+import { GetFilmsByTagDto } from 'src/tags/dto/get-tag.dto';
 import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
 import { TagsService } from 'src/tags/providers/tags.service';
 
@@ -52,5 +53,13 @@ export class TagsController {
   })
   findOne(@Param() reqParams: SlugDto) {
     return this.tagsService.findOne(reqParams.slug);
+  }
+
+  @Get(':slug/films')
+  findFilmsByTag(
+    @Param() reqParams: SlugDto,
+    @Query() reqQuery: GetFilmsByTagDto,
+  ) {
+    return this.tagsService.findFilmsByTag(reqParams.slug, reqQuery);
   }
 }
