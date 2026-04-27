@@ -1,6 +1,7 @@
-import { ApiProperty, IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, OmitType } from '@nestjs/swagger';
 import { IsIn } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 
 class GetStudiosBaseDto {
   @ApiProperty({
@@ -15,3 +16,5 @@ export class GetStudiosDto extends IntersectionType(
   GetStudiosBaseDto,
   PaginationQueryDto,
 ) {}
+
+export class GetFilmsByStudioDto extends OmitType(GetFilmsDto, ['tag']) {}

@@ -10,3 +10,8 @@ GET {{localBaseUrl}}/studios
 # GET /studios/:slug
 # Sends a single studio with relations
 GET {{localBaseUrl}}/studios/paramount-pictures
+
+### Finds all films by studio
+# GET /studios/:slug/films
+# Sends an array of films.
+GET {{localBaseUrl}}/studios/paramount-pictures/films

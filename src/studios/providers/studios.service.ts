@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
+import { Film } from 'src/films/entities/film.entity';
+import {
+  GetFilmsByStudioDto,
+  GetStudiosDto,
+} from 'src/studios/dto/get-studio.dto';
 import { Studio } from 'src/studios/entities/studio.entity';
 import { Repository } from 'typeorm';
 
@@ -13,6 +17,11 @@ export class StudiosService {
      */
     @InjectRepository(Studio)
     private studiosRepository: Repository<Studio>,
+    /**
+     * Films repository
+     */
+    @InjectRepository(Film)
+    private filmsRepository: Repository<Film>,
     /**
      * Pagination provider
      */
@@ -53,5 +62,29 @@ export class StudiosService {
     if (!studio) throw new NotFoundException();
 
     return studio;
+  }
+
+  public async findFilmsByStudio(slug: string, reqQuery: GetFilmsByStudioDto) {
+    const { limit, orderBy, page } = reqQuery;
+
+    const films = await this.filmsRepository.find({
+      where: {
+        studio: {
+          slug,
+        },
+      },
+      order:
+        orderBy === 'nameDesc'
+          ? { name: 'DESC', releaseYear: 'ASC' }
+          : orderBy === 'yearAsc'
+            ? { releaseYear: 'ASC', name: 'ASC' }
+            : orderBy === 'yearDesc'
+              ? { releaseYear: 'DESC', name: 'ASC' }
+              : { name: 'ASC', releaseYear: 'ASC' },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    return films;
   }
 }
