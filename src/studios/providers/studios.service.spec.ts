@@ -4,7 +4,10 @@ import { Repository } from 'typeorm';
 import { Studio } from 'src/studios/entities/studio.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
+import {
+  GetFilmsByStudioDto,
+  GetStudiosDto,
+} from 'src/studios/dto/get-studio.dto';
 import { Film } from 'src/films/entities/film.entity';
 
 describe('StudiosService', () => {
@@ -151,7 +154,11 @@ describe('StudiosService', () => {
 
   describe('findFilmsByStudio', () => {
     const params = { slug: 'paramount-pictures' };
-    const query: GetStudiosDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
+    const query: GetFilmsByStudioDto = {
+      limit: 3,
+      orderBy: 'nameAsc',
+      page: 1,
+    };
 
     it('should call Film repository.find()', async () => {
       await service.findFilmsByStudio(params.slug, query);
@@ -184,7 +191,7 @@ describe('StudiosService', () => {
         },
       });
 
-      const result = await service.findAll(query);
+      const result = await service.findFilmsByStudio(params.slug, query);
 
       expect(result.data).toEqual(films);
       expect(result.links.current).toBeDefined();
