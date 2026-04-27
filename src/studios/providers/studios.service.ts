@@ -67,7 +67,7 @@ export class StudiosService {
   public async findFilmsByStudio(slug: string, reqQuery: GetFilmsByStudioDto) {
     const { limit, orderBy, page } = reqQuery;
 
-    const films = await this.filmsRepository.find({
+    const [films, count] = await this.filmsRepository.findAndCount({
       where: {
         studio: {
           slug,
@@ -85,6 +85,14 @@ export class StudiosService {
       skip: (page - 1) * limit,
     });
 
-    return films;
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: films,
+      limit,
+      orderBy,
+      page,
+      totalItems: count,
+    });
+
+    return finalResponse;
   }
 }
