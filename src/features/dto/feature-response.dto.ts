@@ -7,6 +7,9 @@ export class FeatureResponseDto {
   @ApiProperty({ example: 'Corriganville' })
   name: string;
 
+  @ApiProperty({ example: 'A Brief History' })
+  subtitle: string;
+
   @ApiProperty({ example: 'corriganville' })
   slug: string;
 }
