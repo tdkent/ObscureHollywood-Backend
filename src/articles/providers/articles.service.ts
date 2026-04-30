@@ -35,13 +35,8 @@ export class ArticlesService {
     let totalItems: number;
 
     if (!searchString) {
-      articles = await this.articlesRepository.find({
-        order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
-        take: limit,
-        skip: (page - 1) * limit,
-      });
-
-      totalItems = await this.articlesRepository.count();
+      articles = [];
+      totalItems = 0;
     } else {
       const sortDirection = orderBy === 'nameAsc' ? 'ASC' : 'DESC';
 
