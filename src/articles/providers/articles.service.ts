@@ -29,19 +29,14 @@ export class ArticlesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
-    const { limit, orderBy, page, searchString } = reqQuery;
+    const { limit, orderBy, page, q: searchString } = reqQuery;
 
     let articles: ArticleResponse[];
     let totalItems: number;
 
     if (!searchString) {
-      articles = await this.articlesRepository.find({
-        order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
-        take: limit,
-        skip: (page - 1) * limit,
-      });
-
-      totalItems = await this.articlesRepository.count();
+      articles = [];
+      totalItems = 0;
     } else {
       const sortDirection = orderBy === 'nameAsc' ? 'ASC' : 'DESC';
 
@@ -113,7 +108,7 @@ export class ArticlesService {
       limit,
       orderBy,
       page,
-      searchString,
+      q: searchString,
       totalItems,
     });
 

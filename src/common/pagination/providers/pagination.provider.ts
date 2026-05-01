@@ -11,7 +11,7 @@ export class PaginationProvider {
     limit,
     orderBy,
     page,
-    searchString,
+    q: searchString,
     totalItems,
     tags,
   }: CreatePaginationMetadataInputs<T>) {
@@ -34,7 +34,7 @@ export class PaginationProvider {
      * Query string w/o page params
      */
     const nonPageParams = `&limit=${limit}&orderBy=${orderBy}`;
-    const searchParam = searchString ? `&searchString=${searchString}` : '';
+    const searchParam = searchString ? `&q=${searchString}` : '';
     const tagParams = tags && tags.length ? `&tag=${tags.join('&tag=')}` : '';
 
     /**

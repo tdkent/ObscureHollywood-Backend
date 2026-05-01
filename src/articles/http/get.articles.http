@@ -5,4 +5,4 @@ GET {{localBaseUrl}}/articles
 ?limit=10
 &page=1
 &orderBy=nameAsc
-&searchString=the
+&q=the

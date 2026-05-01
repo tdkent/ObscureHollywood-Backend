@@ -20,7 +20,7 @@ class GetArticlesBaseDto {
   @IsString()
   @MinLength(3)
   @MaxLength(64)
-  searchString?: string;
+  q?: string;
 }
 
 export class GetArticlesDto extends IntersectionType(
