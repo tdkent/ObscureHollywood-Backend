@@ -5,7 +5,7 @@ export interface CreatePaginationMetadataInputs<T extends ObjectLiteral> {
   limit: number;
   orderBy: string;
   page: number;
-  searchString?: string;
+  q?: string;
   tags?: string[];
   totalItems: number;
 }

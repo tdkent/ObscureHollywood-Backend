@@ -29,7 +29,7 @@ export class ArticlesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
-    const { limit, orderBy, page, searchString } = reqQuery;
+    const { limit, orderBy, page, q: searchString } = reqQuery;
 
     let articles: ArticleResponse[];
     let totalItems: number;
@@ -108,7 +108,7 @@ export class ArticlesService {
       limit,
       orderBy,
       page,
-      searchString,
+      q: searchString,
       totalItems,
     });
 

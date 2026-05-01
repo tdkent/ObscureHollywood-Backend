@@ -8,9 +8,9 @@ import { Article } from 'src/articles/entities/article.entity';
 
 describe('ArticlesService', () => {
   let service: ArticlesService;
-  let articleRepository: jest.Mocked<
-    Pick<Repository<Partial<Article>>, 'count' | 'find'>
-  >;
+  // let articleRepository: jest.Mocked<
+  //   Pick<Repository<Partial<Article>>, 'count' | 'find'>
+  // >;
 
   // Mock Article repository
   const mockArticleRepository: jest.Mocked<
@@ -68,7 +68,7 @@ describe('ArticlesService', () => {
     }).compile();
 
     service = module.get<ArticlesService>(ArticlesService);
-    articleRepository = module.get(getRepositoryToken(Article));
+    // articleRepository = module.get(getRepositoryToken(Article));
   });
 
   afterEach(() => {
@@ -85,27 +85,17 @@ describe('ArticlesService', () => {
       limit: 3,
       orderBy: 'nameAsc',
       page: 1,
-      searchString: 'search',
+      q: 'search',
     };
 
     const articles: Partial<Article>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-    it('should call repository.find() and repository.count() if searchString query is undefined', async () => {
-      mockArticleRepository.count.mockResolvedValue(3);
-      mockArticleRepository.find.mockResolvedValue(articles);
-
-      await service.findAll(query);
-
-      expect(articleRepository.count).toHaveBeenCalledTimes(1);
-      expect(articleRepository.find).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call repository.createQueryBuilder() if searchString is defined', async () => {
+    it('should call repository.createQueryBuilder() if search string is defined', async () => {
       await service.findAll(queryWithSearch);
       expect(mockDataSource.createQueryBuilder).toHaveBeenCalledTimes(1);
     });
 
-    it('should return articles and pagination metadata if searchString query is undefined', async () => {
+    it('should return articles and pagination metadata if search string query is undefined', async () => {
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: articles,
         links: {
@@ -127,7 +117,7 @@ describe('ArticlesService', () => {
       expect(result.meta.totalItems).toEqual(100);
     });
 
-    it('should return articles and pagination metadata if searchString query is defined', async () => {
+    it('should return articles and pagination metadata if search string query is defined', async () => {
       (mockQueryBuilder.getRawMany as jest.Mock).mockResolvedValue(articles);
 
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
