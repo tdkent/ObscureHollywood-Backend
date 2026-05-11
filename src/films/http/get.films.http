@@ -8,6 +8,11 @@ GET {{localBaseUrl}}/films
 &tag=decade-1930s
 &tag=genre-drama
 
+### Find recent films
+# GET /films/recent
+# Sends array of most recent films.
+GET {{localBaseUrl}}/films/recent
+
 ### Find a single film
 # GET /films/:slug
 # Sends a single film with Article, Person, Studio, Tag relations
