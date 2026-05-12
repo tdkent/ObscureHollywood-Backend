@@ -57,6 +57,18 @@ export class PersonsService {
     return finalResponse;
   }
 
+  public async findRecent() {
+    return this.personsRepository.find({
+      where: {
+        article: Not(IsNull()),
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 3,
+    });
+  }
+
   public async findOne(slug: string) {
     const person = await this.personsRepository.findOne({
       where: { slug },

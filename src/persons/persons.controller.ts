@@ -36,6 +36,11 @@ export class PersonsController {
     return this.personsService.findAll(reqQuery);
   }
 
+  @Get('recent')
+  findRecent() {
+    return this.personsService.findRecent();
+  }
+
   @Get(':slug')
   @ApiOperation({
     summary: 'Get one person by unique slug',
