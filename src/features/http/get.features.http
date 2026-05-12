@@ -6,6 +6,11 @@ GET {{localBaseUrl}}/features
 &page=1
 &orderBy=nameAsc
 
+### Find recent features
+# GET /features/recent
+# Sends the most recently created features.
+GET {{localBaseUrl}}/features/recent
+
 ### Find a single feature
 # GET /features/:slug
 # Sends a single feature with Article relations.

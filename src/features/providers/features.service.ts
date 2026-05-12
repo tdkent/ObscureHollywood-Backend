@@ -44,6 +44,15 @@ export class FeaturesService {
     return finalResponse;
   }
 
+  public async findRecent() {
+    return this.featuresRepository.find({
+      take: 3,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   /**
    * Send a single feature with relations.
    */

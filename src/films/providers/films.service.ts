@@ -84,6 +84,15 @@ export class FilmsService {
     return finalResponse;
   }
 
+  public async findRecent() {
+    return this.filmsRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 3,
+    });
+  }
+
   /**
    * Send a single film with relations.
    */
