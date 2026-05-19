@@ -34,7 +34,7 @@ export class ArticlesService {
     let articles: ArticleResponse[];
     let totalItems: number;
 
-    if (!searchString) {
+    if (!searchString || searchString.length < 2) {
       articles = [];
       totalItems = 0;
     } else {
