@@ -42,20 +42,18 @@ export class StudiosService {
       route: 'studios',
     });
 
-    const studios = await this.studiosRepository.find({
+    const [data, count] = await this.studiosRepository.findAndCount({
       order: orderBy === 'nameAsc' ? { name: 'ASC' } : { name: 'DESC' },
       take: limit,
       skip: (page - 1) * limit,
     });
 
-    const totalItems = await this.studiosRepository.count();
-
     const finalResponse = this.paginationProvider.createPaginationMetadata({
-      data: studios,
+      data,
       limit,
       orderBy,
       page,
-      totalItems,
+      totalItems: count,
     });
 
     return finalResponse;

@@ -9,14 +9,13 @@ import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
 describe('FeaturesService', () => {
   let service: FeaturesService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Feature>>, 'findAndCount' | 'findOne'>
   >;
 
   const mockFeatureRepository: jest.Mocked<
-    Pick<Repository<Partial<Feature>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Feature>>, 'findAndCount' | 'findOne'>
   > = {
-    count: jest.fn(),
-    find: jest.fn(),
+    findAndCount: jest.fn(),
     findOne: jest.fn(),
   };
 
@@ -25,8 +24,7 @@ describe('FeaturesService', () => {
   };
 
   beforeEach(async () => {
-    mockFeatureRepository.count.mockResolvedValue(0);
-    mockFeatureRepository.find.mockResolvedValue([]);
+    mockFeatureRepository.findAndCount.mockResolvedValue([[], 0]);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -61,13 +59,11 @@ describe('FeaturesService', () => {
       page: '1',
     };
 
-    it('should call repository.count() and repository.find()', async () => {
+    it('should call repository.findAndCount()', async () => {
       await service.findAll(query);
 
-      expect(repository.count).toHaveBeenCalledTimes(1);
-
-      expect(repository.find).toHaveBeenCalledTimes(1);
-      expect(repository.find).toHaveBeenCalledWith({
+      expect(repository.findAndCount).toHaveBeenCalledTimes(1);
+      expect(repository.findAndCount).toHaveBeenCalledWith({
         take: Number(query.limit),
         skip: (Number(query.page) - 1) * 10,
         order: { name: 'ASC' },
@@ -77,8 +73,7 @@ describe('FeaturesService', () => {
     it('should return features and pagination metadata', async () => {
       const features: Partial<Feature>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-      repository.count.mockResolvedValue(20);
-      repository.find.mockResolvedValue(features);
+      repository.findAndCount.mockResolvedValue([features, 20]);
 
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: features,
@@ -102,7 +97,6 @@ describe('FeaturesService', () => {
     });
 
     it('should return an empty array if no data can be found', async () => {
-      repository.find.mockResolvedValue([]);
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: [],
         links: {},
