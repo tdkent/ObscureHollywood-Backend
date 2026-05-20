@@ -36,7 +36,7 @@ export class PersonsService {
       route: 'people',
     });
 
-    const persons = await this.personsRepository.find({
+    const [data, count] = await this.personsRepository.findAndCount({
       where: {
         article: Not(IsNull()),
       },
@@ -52,18 +52,12 @@ export class PersonsService {
       skip: (page - 1) * limit,
     });
 
-    const totalItems = await this.personsRepository.count({
-      where: {
-        article: Not(IsNull()),
-      },
-    });
-
     const finalResponse = this.paginationProvider.createPaginationMetadata({
-      data: persons,
+      data,
       limit,
       orderBy,
       page,
-      totalItems,
+      totalItems: count,
     });
 
     return finalResponse;

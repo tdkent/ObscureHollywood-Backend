@@ -37,20 +37,18 @@ export class FeaturesService {
       route: 'features',
     });
 
-    const data = await this.featuresRepository.find({
+    const [data, count] = await this.featuresRepository.findAndCount({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
       take: limit,
       skip: (page - 1) * limit,
     });
-
-    const totalItems = await this.featuresRepository.count();
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
       limit,
       orderBy,
       page,
       data,
-      totalItems,
+      totalItems: count,
     });
 
     return finalResponse;
