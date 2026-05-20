@@ -55,7 +55,11 @@ describe('FeaturesService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetFeaturesDto = { limit: 3, orderBy: 'nameAsc', page: 1 };
+    const query: GetFeaturesDto = {
+      limit: '10',
+      orderBy: 'nameAsc',
+      page: '1',
+    };
 
     it('should call repository.count() and repository.find()', async () => {
       await service.findAll(query);
@@ -64,8 +68,8 @@ describe('FeaturesService', () => {
 
       expect(repository.find).toHaveBeenCalledTimes(1);
       expect(repository.find).toHaveBeenCalledWith({
-        take: query.limit,
-        skip: (query.page - 1) * 10,
+        take: Number(query.limit),
+        skip: (Number(query.page) - 1) * 10,
         order: { name: 'ASC' },
       });
     });

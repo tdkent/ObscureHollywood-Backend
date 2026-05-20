@@ -39,7 +39,11 @@ describe('ArticlesController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetArticlesDto = { limit: 10, page: 1, orderBy: 'nameAsc' };
+    const query: GetArticlesDto = {
+      limit: '10',
+      page: '1',
+      orderBy: 'nameAsc',
+    };
 
     it('should call findAll service once', async () => {
       await service.findAll(query);
