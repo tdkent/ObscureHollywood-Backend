@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Feature } from 'src/features/entities/feature.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class FeaturesService {
@@ -23,9 +24,20 @@ export class FeaturesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetFeaturesDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
 
-    const features = await this.featuresRepository.find({
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'features',
+    });
+
+    const data = await this.featuresRepository.find({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
       take: limit,
       skip: (page - 1) * limit,
@@ -37,7 +49,7 @@ export class FeaturesService {
       limit,
       orderBy,
       page,
-      data: features,
+      data,
       totalItems,
     });
 

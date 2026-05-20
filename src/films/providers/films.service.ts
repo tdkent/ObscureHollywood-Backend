@@ -4,6 +4,7 @@ import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { Film } from 'src/films/entities/film.entity';
 import { Repository } from 'typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class FilmsService {
@@ -23,7 +24,19 @@ export class FilmsService {
    * Send a list of films with pagination and sorting.
    */
   public async findAll(reqQuery: GetFilmsDto) {
-    const { limit, orderBy, page, tag: tags } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+      tag: tags,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'films',
+    });
 
     const sortField =
       orderBy === 'nameAsc' || orderBy === 'nameDesc'

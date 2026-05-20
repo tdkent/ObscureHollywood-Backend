@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 import { Film } from 'src/films/entities/film.entity';
 import {
   GetFilmsByStudioDto,
@@ -28,7 +29,18 @@ export class StudiosService {
     private paginationProvider: PaginationProvider,
   ) {}
   public async findAll(reqQuery: GetStudiosDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'studios',
+    });
 
     const studios = await this.studiosRepository.find({
       order: orderBy === 'nameAsc' ? { name: 'ASC' } : { name: 'DESC' },
@@ -65,7 +77,18 @@ export class StudiosService {
   }
 
   public async findFilmsByStudio(slug: string, reqQuery: GetFilmsByStudioDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'films',
+    });
 
     const [films, count] = await this.filmsRepository.findAndCount({
       where: {
