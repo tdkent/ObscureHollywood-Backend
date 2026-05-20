@@ -5,6 +5,7 @@ import { Tag } from 'src/tags/entities/tag.entity';
 import { GetFilmsByTagDto } from 'src/tags/dto/get-tag.dto';
 import { Film } from 'src/films/entities/film.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class TagsService {
@@ -50,7 +51,18 @@ export class TagsService {
   }
 
   public async findFilmsByTag(slug: string, reqQuery: GetFilmsByTagDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'films',
+    });
 
     const [films, count] = await this.filmsRepository.findAndCount({
       where: {

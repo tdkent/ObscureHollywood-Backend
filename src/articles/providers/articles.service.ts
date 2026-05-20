@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { Article } from 'src/articles/entities/article.entity';
 import { GetArticlesDto } from 'src/articles/dto/get-articles.dto';
 import { DataSource } from 'typeorm';
 import { ArticleResponse } from 'src/articles/dto/article-response.dto';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class ArticlesService {
@@ -14,11 +12,6 @@ export class ArticlesService {
      * Inject data source (for raw query)
      */
     private readonly dataSource: DataSource,
-    /**
-     * Inject article repository
-     */
-    @InjectRepository(Article)
-    private articlesRepository: Repository<Article>,
     /**
      * Pagination provider
      */
@@ -29,7 +22,19 @@ export class ArticlesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
-    const { limit, orderBy, page, q: searchString } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+      q: searchString,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'articles',
+    });
 
     let articles: ArticleResponse[];
     let totalItems: number;

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
 import { Person } from 'src/persons/entities/person.entity';
 import { IsNull, Not, Repository } from 'typeorm';
@@ -22,7 +23,18 @@ export class PersonsService {
    * Send a list of persons with pagination and sorting.
    */
   public async findAll(reqQuery: GetPersonsDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'people',
+    });
 
     const persons = await this.personsRepository.find({
       where: {

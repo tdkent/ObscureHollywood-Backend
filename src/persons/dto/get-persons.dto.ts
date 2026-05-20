@@ -1,5 +1,5 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { IsIn } from 'class-validator';
+import { IsString } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 class GetPersonsBaseDto {
@@ -7,9 +7,8 @@ class GetPersonsBaseDto {
     description: "Option to sort film list. Default: 'lastNameAsc'.",
     example: 'lastNameAsc',
   })
-  @IsIn(['firstNameAsc', 'firstNameDesc', 'lastNameAsc', 'lastNameDesc'])
-  orderBy: 'firstNameAsc' | 'firstNameDesc' | 'lastNameAsc' | 'lastNameDesc' =
-    'lastNameAsc';
+  @IsString()
+  orderBy: string = 'lastNameAsc';
 }
 
 export class GetPersonsDto extends IntersectionType(

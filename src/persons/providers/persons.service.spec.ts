@@ -53,7 +53,11 @@ describe('PersonsService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetPersonsDto = { limit: 3, orderBy: 'lastNameAsc', page: 1 };
+    const query: GetPersonsDto = {
+      limit: '10',
+      orderBy: 'lastNameAsc',
+      page: '1',
+    };
 
     it('should call repository.find() and repository.count()', async () => {
       repository.find.mockResolvedValue([]);
@@ -66,8 +70,8 @@ describe('PersonsService', () => {
 
       expect(repository.find).toHaveBeenCalledWith(
         expect.objectContaining({
-          take: query.limit,
-          skip: (query.page - 1) * 10,
+          take: Number(query.limit),
+          skip: (Number(query.page) - 1) * 10,
           order: { lastName: 'ASC', firstName: 'ASC' },
         }),
       );

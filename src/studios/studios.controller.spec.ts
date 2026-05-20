@@ -46,7 +46,7 @@ describe('StudiosController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetStudiosDto = { limit: 10, page: 1, orderBy: 'nameAsc' };
+    const query: GetStudiosDto = { limit: '10', page: '1', orderBy: 'nameAsc' };
 
     it('should call findAll service once', async () => {
       await service.findAll(query);
@@ -102,8 +102,8 @@ describe('StudiosController', () => {
   describe('findFilmsByStudio', () => {
     const slug = 'paramount-pictures';
     const query: GetFilmsByStudioDto = {
-      limit: 10,
-      page: 1,
+      limit: '10',
+      page: '1',
       orderBy: 'nameAsc',
     };
 

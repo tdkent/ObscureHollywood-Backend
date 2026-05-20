@@ -1,5 +1,5 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 class GetArticlesBaseDto {
@@ -7,8 +7,8 @@ class GetArticlesBaseDto {
     description: "Option to sort article list. Default: 'nameAsc'.",
     example: 'nameAsc',
   })
-  @IsIn(['nameAsc', 'nameDesc'])
-  orderBy: 'nameAsc' | 'nameDesc' = 'nameAsc';
+  @IsString()
+  orderBy: string = 'nameAsc';
 
   @IsOptional()
   @IsString()

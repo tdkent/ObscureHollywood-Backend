@@ -41,7 +41,11 @@ describe('FeaturesController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetFeaturesDto = { limit: 10, page: 1, orderBy: 'nameAsc' };
+    const query: GetFeaturesDto = {
+      limit: '10',
+      page: '1',
+      orderBy: 'nameAsc',
+    };
 
     it('should call findAll service once', async () => {
       await service.findAll(query);

@@ -88,8 +88,8 @@ describe('TagsController', () => {
   describe('findFilmsByTag', () => {
     const slug = 'decade-1930s';
     const query: GetFilmsByTagDto = {
-      limit: 10,
-      page: 1,
+      limit: '10',
+      page: '1',
       orderBy: 'nameAsc',
     };
 
