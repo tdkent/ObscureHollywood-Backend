@@ -37,9 +37,11 @@ async function bootstrap() {
    */
   app.useGlobalPipes(
     new ValidationPipe({
+      /**
+       * Unknown URL params are stripped but do not throw an error.
+       */
       whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
+      forbidNonWhitelisted: false,
       /**
        * Implicitly convert types (replaces Type decorator in DTO)
        */
