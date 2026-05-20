@@ -54,7 +54,7 @@ describe('FeaturesService', () => {
 
   describe('findAll', () => {
     const query: GetFeaturesDto = {
-      limit: '10',
+      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };

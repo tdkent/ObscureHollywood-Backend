@@ -2,7 +2,7 @@
 # GET /features
 # Sends an array of features.
 GET {{localBaseUrl}}/features
-?limit=10
+?limit=25
 &page=1
 &orderBy=nameAsc
 

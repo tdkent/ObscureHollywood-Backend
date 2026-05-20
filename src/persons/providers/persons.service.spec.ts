@@ -52,7 +52,7 @@ describe('PersonsService', () => {
 
   describe('findAll', () => {
     const query: GetPersonsDto = {
-      limit: '10',
+      limit: '25',
       orderBy: 'lastNameAsc',
       page: '1',
     };

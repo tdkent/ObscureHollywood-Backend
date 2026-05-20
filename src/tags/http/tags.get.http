@@ -13,5 +13,5 @@ GET {{localBaseUrl}}/tags/decade-1930s
 # Sends an array of films.
 GET {{localBaseUrl}}/tags/decade-1930s/films
 ?page=1
-&limit=10
+&limit=25
 &orderBy=yearAsc

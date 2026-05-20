@@ -42,7 +42,7 @@ describe('PersonsController', () => {
 
   describe('findAll', () => {
     const query: GetPersonsDto = {
-      limit: '10',
+      limit: '25',
       page: '1',
       orderBy: 'lastNameAsc',
     };

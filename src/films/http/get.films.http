@@ -2,7 +2,7 @@
 # GET /films
 # Sends an array of films.
 GET {{localBaseUrl}}/films
-?limit=10
+?limit=25
 &page=1
 &orderBy=nameAsc
 &tag=decade-1930s
