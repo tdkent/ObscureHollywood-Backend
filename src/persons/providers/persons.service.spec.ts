@@ -9,14 +9,13 @@ import { Repository } from 'typeorm';
 describe('PersonsService', () => {
   let service: PersonsService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Person>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Person>>, 'findAndCount' | 'findOne'>
   >;
 
   const mockPersonRepository: jest.Mocked<
-    Pick<Repository<Partial<Person>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Person>>, 'findAndCount' | 'findOne'>
   > = {
-    count: jest.fn(),
-    find: jest.fn(),
+    findAndCount: jest.fn(),
     findOne: jest.fn(),
   };
 
@@ -25,7 +24,6 @@ describe('PersonsService', () => {
   };
 
   beforeEach(async () => {
-    mockPersonRepository.find.mockResolvedValue([]);
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PersonsService,
@@ -59,16 +57,14 @@ describe('PersonsService', () => {
       page: '1',
     };
 
-    it('should call repository.find() and repository.count()', async () => {
-      repository.find.mockResolvedValue([]);
-      repository.count.mockResolvedValue(35);
+    it('should call repository.findAndCount()', async () => {
+      repository.findAndCount.mockResolvedValue([[], 35]);
 
       await service.findAll(query);
 
-      expect(repository.find).toHaveBeenCalledTimes(1);
-      expect(repository.count).toHaveBeenCalledTimes(1);
+      expect(repository.findAndCount).toHaveBeenCalledTimes(1);
 
-      expect(repository.find).toHaveBeenCalledWith(
+      expect(repository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
           take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
@@ -80,7 +76,7 @@ describe('PersonsService', () => {
     it('should return persons and pagination metadata', async () => {
       const persons: Partial<Person>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-      repository.find.mockResolvedValue(persons);
+      repository.findAndCount.mockResolvedValue([persons, 3]);
 
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: persons,
@@ -104,7 +100,7 @@ describe('PersonsService', () => {
     });
 
     it('should return an empty array if no data can be found', async () => {
-      repository.find.mockResolvedValue([]);
+      repository.findAndCount.mockResolvedValue([[], 0]);
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: [],
         links: {},

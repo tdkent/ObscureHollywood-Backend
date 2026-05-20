@@ -13,17 +13,16 @@ import { Film } from 'src/films/entities/film.entity';
 describe('StudiosService', () => {
   let service: StudiosService;
   let repository: jest.Mocked<
-    Pick<Repository<Partial<Studio>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Studio>>, 'findAndCount' | 'findOne'>
   >;
   let filmRepository: jest.Mocked<
     Pick<Repository<Partial<Film>>, 'findAndCount'>
   >;
 
   const mockStudioRepository: jest.Mocked<
-    Pick<Repository<Partial<Studio>>, 'count' | 'find' | 'findOne'>
+    Pick<Repository<Partial<Studio>>, 'findAndCount' | 'findOne'>
   > = {
-    count: jest.fn(),
-    find: jest.fn(),
+    findAndCount: jest.fn(),
     findOne: jest.fn(),
   };
 
@@ -38,8 +37,7 @@ describe('StudiosService', () => {
   };
 
   beforeEach(async () => {
-    mockStudioRepository.count.mockResolvedValue(0);
-    mockStudioRepository.find.mockResolvedValue([]);
+    mockStudioRepository.findAndCount.mockResolvedValue([[], 0]);
 
     mockFilmRepository.findAndCount.mockResolvedValue([[], 0]);
 
@@ -73,13 +71,12 @@ describe('StudiosService', () => {
   describe('findAll', () => {
     const query: GetStudiosDto = { limit: '10', orderBy: 'nameAsc', page: '1' };
 
-    it('should call repository.find()', async () => {
+    it('should call repository.findAndCount()', async () => {
       await service.findAll(query);
 
-      expect(repository.count).toHaveBeenCalledTimes(1);
-      expect(repository.find).toHaveBeenCalledTimes(1);
+      expect(repository.findAndCount).toHaveBeenCalledTimes(1);
 
-      expect(repository.find).toHaveBeenCalledWith(
+      expect(repository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
           take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
@@ -91,8 +88,7 @@ describe('StudiosService', () => {
     it('should return studios and pagination metadata', async () => {
       const studios: Partial<Studio>[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-      mockStudioRepository.count.mockResolvedValue(35);
-      mockStudioRepository.find.mockResolvedValue(studios);
+      mockStudioRepository.findAndCount.mockResolvedValue([studios, 35]);
 
       mockPaginationProvider.createPaginationMetadata.mockReturnValueOnce({
         data: studios,
