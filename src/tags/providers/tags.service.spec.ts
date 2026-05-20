@@ -103,7 +103,7 @@ describe('TagsService', () => {
   describe('findFilmsByTag', () => {
     const params = { slug: 'decade-1930s' };
     const query: GetFilmsByTagDto = {
-      limit: '10',
+      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };

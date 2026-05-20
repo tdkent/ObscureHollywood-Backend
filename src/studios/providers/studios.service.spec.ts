@@ -69,7 +69,7 @@ describe('StudiosService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetStudiosDto = { limit: '10', orderBy: 'nameAsc', page: '1' };
+    const query: GetStudiosDto = { limit: '25', orderBy: 'nameAsc', page: '1' };
 
     it('should call repository.findAndCount()', async () => {
       await service.findAll(query);
@@ -151,7 +151,7 @@ describe('StudiosService', () => {
   describe('findFilmsByStudio', () => {
     const params = { slug: 'paramount-pictures' };
     const query: GetFilmsByStudioDto = {
-      limit: '10',
+      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };

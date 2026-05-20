@@ -15,7 +15,7 @@ export function validateParams({
   orderParam,
 }: Inputs) {
   // Validate pagination limit
-  const Limit = z.literal(['10', '25']);
+  const Limit = z.literal(['25', '50']);
   const { success: validLimit } = Limit.safeParse(limitParam);
 
   // Validate page
@@ -57,7 +57,7 @@ export function validateParams({
   }
 
   const params = {
-    limit: validLimit ? Number(limitParam) : 10,
+    limit: validLimit ? Number(limitParam) : 25,
     page: validPage ? Number(pageParam) : 1,
     orderBy: validOrder,
   };

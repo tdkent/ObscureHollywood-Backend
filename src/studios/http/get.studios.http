@@ -2,7 +2,7 @@
 # GET /studios
 # Sends an array of studios.
 GET {{localBaseUrl}}/studios
-?limit=10
+?limit=25
 &page=1
 &orderBy=nameAsc
 

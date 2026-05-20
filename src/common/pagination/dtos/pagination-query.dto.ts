@@ -4,10 +4,10 @@ import { IsString } from 'class-validator';
 export class PaginationQueryDto {
   @ApiProperty({
     description: 'Maximum results to return per page.',
-    example: '10',
+    example: '25',
   })
   @IsString()
-  limit: string = '10';
+  limit: string = '25';
 
   @ApiProperty({
     description: 'Pagination page.',
