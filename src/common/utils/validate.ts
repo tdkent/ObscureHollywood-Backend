@@ -4,7 +4,7 @@ interface Inputs {
   limitParam: string;
   orderParam: string;
   pageParam: string;
-  route: 'articles' | 'features' | 'films' | 'people' | 'studios';
+  route: 'articles' | 'features' | 'films' | 'people' | 'quiz' | 'studios';
 }
 
 /** Validate and return coerced URL search params. */
@@ -37,6 +37,7 @@ export function validateParams({
   switch (route) {
     case 'articles':
     case 'features':
+    case 'quiz':
     case 'studios': {
       const { success } = NameOrder.safeParse(orderParam);
       validOrder = success ? orderParam : 'nameAsc';

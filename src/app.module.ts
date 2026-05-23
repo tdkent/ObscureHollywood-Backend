@@ -12,6 +12,7 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import { PersonsModule } from './persons/persons.module';
 import { StudiosModule } from './studios/studios.module';
 import { TagsModule } from './tags/tags.module';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TagsModule } from './tags/tags.module';
     FeaturesModule,
     PaginationModule,
     PersonsModule,
+    QuizModule,
     StudiosModule,
     TagsModule,
   ],
