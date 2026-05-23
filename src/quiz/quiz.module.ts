@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { QuizService } from './quiz.service';
+import { QuizService } from 'src/quiz/providers/quiz.service';
 import { QuizController } from './quiz.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Quiz } from 'src/quiz/entities/quiz.entity';

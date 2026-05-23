@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QuizController } from 'src/quiz/quiz.controller';
-import { QuizService } from 'src/quiz/quiz.service';
+import { QuizService } from 'src/quiz/providers/quiz.service';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import { PaginatedResponse } from 'src/common/pagination/interfaces/paginated-response.interface';
 import { Quiz } from 'src/quiz/entities/quiz.entity';

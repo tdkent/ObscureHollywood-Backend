@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { QuizService } from './quiz.service';
+import { QuizService } from 'src/quiz/providers/quiz.service';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import {
   ApiOperation,
