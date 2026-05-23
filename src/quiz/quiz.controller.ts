@@ -7,6 +7,7 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { GetQuizzesResponseDto } from 'src/quiz/dto/get-quizzes-response.dto';
+import { SlugDto } from 'src/common/dtos/slug.dto';
 
 @Controller('quiz')
 export class QuizController {
@@ -30,8 +31,8 @@ export class QuizController {
     return this.quizService.findAll(reqQuery);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.quizService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param() params: SlugDto) {
+    return this.quizService.findOne(params.slug);
   }
 }

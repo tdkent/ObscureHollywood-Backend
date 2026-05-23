@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
@@ -50,7 +50,21 @@ export class QuizService {
     return finalResponse;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} quiz`;
+  public async findOne(slug: string) {
+    const quiz = await this.quizRepository.findOne({
+      where: { slug },
+      relations: {
+        quizQuestions: true,
+      },
+      order: {
+        quizQuestions: {
+          questionNumber: 'ASC',
+        },
+      },
+    });
+
+    if (!quiz) throw new NotFoundException();
+
+    return quiz;
   }
 }
