@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Quiz, type Quiz as QuizType } from 'src/quiz/entities/quiz.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class QuizQuestion {
@@ -39,14 +40,17 @@ export class QuizQuestion {
     type: 'varchar',
     length: 64,
   })
+  @Exclude()
   quizSlug: string;
 
-  @ManyToOne(() => Quiz, (quiz) => quiz.quizQuestions)
-  quiz: QuizType;
-
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
+
+  @ManyToOne(() => Quiz, (quiz) => quiz.quizQuestions)
+  quiz: QuizType;
 }

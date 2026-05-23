@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { QuizQuestion } from 'src/quiz/entities/quiz-question.entity';
+import { Exclude } from 'class-transformer';
 
 export enum Theme {
   FILMS = 'films',
@@ -41,9 +42,11 @@ export class Quiz {
   theme: Theme;
 
   @CreateDateColumn()
+  @Exclude()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updatedAt: Date;
 
   @OneToMany(() => QuizQuestion, (qq) => qq.quiz, {

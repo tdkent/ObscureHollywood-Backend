@@ -5,9 +5,12 @@ import {
   ApiOperation,
   ApiOkResponse,
   ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { GetQuizzesResponseDto } from 'src/quiz/dto/get-quizzes-response.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
+import { GetQuizResponseDto } from 'src/quiz/dto/get-quiz-response.dto';
 
 @Controller('quiz')
 export class QuizController {
@@ -32,6 +35,25 @@ export class QuizController {
   }
 
   @Get(':slug')
+  @ApiOperation({
+    summary: 'Get one quiz by unique slug',
+    description: 'Returns a single quiz, including its related questions.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the quiz.',
+    example: 'at-the-movies',
+  })
+  @ApiOkResponse({
+    description: 'Object containing quiz and relations data.',
+    type: GetQuizResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'The slug parameter is invalid.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No quiz was found for the provided slug.',
+  })
   findOne(@Param() params: SlugDto) {
     return this.quizService.findOne(params.slug);
   }

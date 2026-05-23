@@ -19,6 +19,9 @@ export class QuizService {
      */
     private paginationProvider: PaginationProvider,
   ) {}
+  /**
+   * Send a list of quizzes with pagination and sorting.
+   */
   public async findAll(reqQuery: GetQuizzesDto) {
     const {
       limit: limitParam,
@@ -50,6 +53,9 @@ export class QuizService {
     return finalResponse;
   }
 
+  /**
+   * Send a single quiz with relations.
+   */
   public async findOne(slug: string) {
     const quiz = await this.quizRepository.findOne({
       where: { slug },
