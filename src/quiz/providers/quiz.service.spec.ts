@@ -107,29 +107,29 @@ describe('QuizService', () => {
     });
   });
 
-  // describe('findOne', () => {
-  //   const params = { slug: 'at-the-movies' };
-  //   const mockQuiz = { id: 1 };
+  describe('findOne', () => {
+    const params = { slug: 'at-the-movies' };
+    const mockQuiz = { id: 1 };
 
-  //   it('should call repository.findOne()', async () => {
-  //     repository.findOne.mockResolvedValue(mockQuiz);
+    it('should call repository.findOne()', async () => {
+      repository.findOne.mockResolvedValue(mockQuiz);
 
-  //     await service.findOne(params.slug);
+      await service.findOne(params.slug);
 
-  //     expect(repository.findOne).toHaveBeenCalledTimes(1);
-  //     expect(repository.findOne).toHaveBeenCalledWith(
-  //       expect.objectContaining({
-  //         where: { slug: params.slug },
-  //       }),
-  //     );
-  //   });
+      expect(repository.findOne).toHaveBeenCalledTimes(1);
+      expect(repository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { slug: params.slug },
+        }),
+      );
+    });
 
-  //   it('should return the quiz', async () => {
-  //     repository.findOne.mockResolvedValue(mockQuiz);
+    it('should return the quiz', async () => {
+      repository.findOne.mockResolvedValue(mockQuiz);
 
-  //     const result = await service.findOne(params.slug);
+      const result = await service.findOne(params.slug);
 
-  //     expect(result).toEqual(mockQuiz);
-  //   });
-  // });
+      expect(result).toEqual(mockQuiz);
+    });
+  });
 });

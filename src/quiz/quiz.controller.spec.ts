@@ -77,23 +77,23 @@ describe('QuizController', () => {
     });
   });
 
-  // describe('findOne', () => {
-  //   const slug = 'at-the-movies';
-  //   it('should call findOne service once', async () => {
-  //     await service.findOne(slug);
-  //     expect(service.findOne).toHaveBeenCalledTimes(1);
-  //   });
+  describe('findOne', () => {
+    const slug = 'at-the-movies';
+    it('should call findOne service once', async () => {
+      await service.findOne(slug);
+      expect(service.findOne).toHaveBeenCalledTimes(1);
+    });
 
-  //   it('should pass the slug to the findOne service', async () => {
-  //     await service.findOne(slug);
-  //     expect(service.findOne).toHaveBeenCalledWith(slug);
-  //   });
+    it('should pass the slug to the findOne service', async () => {
+      await service.findOne(slug);
+      expect(service.findOne).toHaveBeenCalledWith(slug);
+    });
 
-  //   it('should return the feature', async () => {
-  //     const feature = { id: 1 };
-  //     mockQuizService.findOne.mockResolvedValue(feature);
-  //     const result = await service.findOne(slug);
-  //     expect(result).toBe(feature);
-  //   });
-  // });
+    it('should return the quiz', async () => {
+      const quiz = { id: 1 };
+      mockQuizService.findOne.mockResolvedValue(quiz);
+      const result = await service.findOne(slug);
+      expect(result).toBe(quiz);
+    });
+  });
 });
