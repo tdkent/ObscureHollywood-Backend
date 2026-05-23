@@ -1,0 +1,12 @@
+### Find all quizzes with pagination queries
+# GET /quiz
+# Sends an array of quizzes.
+GET {{localBaseUrl}}/quiz
+?limit=25
+&page=1
+&orderBy=nameAsc
+
+### Find a single quiz
+# GET /quiz/:slug
+# Sends a single quiz with QuizQuestion relations.
+GET {{localBaseUrl}}/quiz/actors

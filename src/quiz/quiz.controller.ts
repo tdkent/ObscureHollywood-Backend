@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { QuizService } from './quiz.service';
+import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 
 @Controller('quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Post()
   @Get()
-  findAll() {
-    return this.quizService.findAll();
+  findAll(@Query() reqQuery: GetQuizzesDto) {
+    return this.quizService.findAll(reqQuery);
   }
 
   @Get(':id')
