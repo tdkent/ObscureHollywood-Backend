@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
+import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import { Quiz } from 'src/quiz/entities/quiz.entity';
 import { Repository } from 'typeorm';
@@ -77,7 +78,7 @@ export class QuizService {
   /**
    * Create results from a single quiz.
    */
-  public createQuizResult(slug: string) {
-    return slug;
+  public createQuizResult(slug: string, reqBody: CreateQuizResultDto) {
+    return { slug, reqBody };
   }
 }

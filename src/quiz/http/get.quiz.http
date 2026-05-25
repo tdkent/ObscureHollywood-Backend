@@ -15,3 +15,9 @@ GET {{localBaseUrl}}/quiz/at-the-movies
 # POST /quiz/:slug/result
 # Create and send result of a single quiz.
 POST {{localBaseUrl}}/quiz/at-the-movies/result
+Content-Type: application/json
+
+{
+  "userId": "52809afb-151d-44bc-9cd3-0f3161c1bd46",
+  "answers": [1,2,3,4,1,2,3,4,1,2]
+}
