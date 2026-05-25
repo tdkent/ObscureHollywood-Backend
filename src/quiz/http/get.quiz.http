@@ -9,4 +9,9 @@ GET {{localBaseUrl}}/quiz
 ### Find a single quiz
 # GET /quiz/:slug
 # Sends a single quiz with QuizQuestion relations.
-GET {{localBaseUrl}}/quiz/actors
+GET {{localBaseUrl}}/quiz/at-the-movies
+
+### Create a single quiz result
+# POST /quiz/:slug/result
+# Create and send result of a single quiz.
+POST {{localBaseUrl}}/quiz/at-the-movies/result

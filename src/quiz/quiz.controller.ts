@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { QuizService } from 'src/quiz/providers/quiz.service';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import {
@@ -56,5 +56,10 @@ export class QuizController {
   })
   findOne(@Param() params: SlugDto) {
     return this.quizService.findOne(params.slug);
+  }
+
+  @Post(':slug/result')
+  createQuizResult(@Param() params: SlugDto) {
+    return this.quizService.createQuizResult(params.slug);
   }
 }

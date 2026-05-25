@@ -73,4 +73,11 @@ export class QuizService {
 
     return quiz;
   }
+
+  /**
+   * Create results from a single quiz.
+   */
+  public createQuizResult(slug: string) {
+    return slug;
+  }
 }
