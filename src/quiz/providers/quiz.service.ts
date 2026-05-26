@@ -4,6 +4,7 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { validateParams } from 'src/common/utils/validate';
 import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
+import { QuizQuestion } from 'src/quiz/entities/quiz-question.entity';
 import { Quiz } from 'src/quiz/entities/quiz.entity';
 import { Repository } from 'typeorm';
 
@@ -15,6 +16,11 @@ export class QuizService {
      */
     @InjectRepository(Quiz)
     private readonly quizRepository: Repository<Quiz>,
+    /**
+     * Quiz Question repository
+     */
+    @InjectRepository(QuizQuestion)
+    private readonly quizQuestionRepository: Repository<QuizQuestion>,
     /**
      * Pagination provider
      */
@@ -78,7 +84,22 @@ export class QuizService {
   /**
    * Create results from a single quiz.
    */
-  public createQuizResult(slug: string, reqBody: CreateQuizResultDto) {
-    return { slug, reqBody };
+  public async createQuizResult(slug: string, reqBody: CreateQuizResultDto) {
+    const { answers } = reqBody;
+
+    const questions = await this.quizQuestionRepository.find({
+      where: { quizSlug: slug },
+    });
+
+    if (!questions.length) throw new NotFoundException();
+
+    let score = 0;
+
+    for (const { correctAnswer, questionNumber } of questions) {
+      const userAnswer = answers[questionNumber] as number;
+      if (userAnswer === correctAnswer) score++;
+    }
+
+    return score;
   }
 }
