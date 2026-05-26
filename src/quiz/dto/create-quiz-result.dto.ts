@@ -1,22 +1,81 @@
+import { Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
-  IsArray,
   IsInt,
+  IsObject,
   IsUUID,
   Max,
   Min,
+  ValidateNested,
 } from 'class-validator';
+
+class Answers {
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  1: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  2: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  3: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  4: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  5: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  6: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  7: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  8: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  9: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(4)
+  10: number;
+}
 
 export class CreateQuizResultDto {
   @IsUUID()
   userId: string;
 
-  @IsArray()
-  @ArrayMinSize(10)
-  @ArrayMaxSize(10)
-  @IsInt({ each: true })
-  @Min(1, { each: true })
-  @Max(4, { each: true })
-  answers: number[];
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Answers)
+  answers: Answers;
 }
