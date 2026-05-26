@@ -5,6 +5,7 @@ import { validateParams } from 'src/common/utils/validate';
 import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import { QuizQuestion } from 'src/quiz/entities/quiz-question.entity';
+import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
 import { Quiz } from 'src/quiz/entities/quiz.entity';
 import { Repository } from 'typeorm';
 
@@ -21,6 +22,11 @@ export class QuizService {
      */
     @InjectRepository(QuizQuestion)
     private readonly quizQuestionRepository: Repository<QuizQuestion>,
+    /**
+     * Quiz Result repository
+     */
+    @InjectRepository(QuizResult)
+    private readonly quizResultRepository: Repository<QuizResult>,
     /**
      * Pagination provider
      */
@@ -85,21 +91,32 @@ export class QuizService {
    * Create results from a single quiz.
    */
   public async createQuizResult(slug: string, reqBody: CreateQuizResultDto) {
-    const { answers } = reqBody;
+    const { answers, userId } = reqBody;
 
-    const questions = await this.quizQuestionRepository.find({
-      where: { quizSlug: slug },
+    const quiz = await this.quizRepository.findOne({
+      where: { slug },
+      relations: {
+        quizQuestions: true,
+      },
     });
 
-    if (!questions.length) throw new NotFoundException();
+    if (!quiz) throw new NotFoundException();
 
     let score = 0;
 
-    for (const { correctAnswer, questionNumber } of questions) {
+    for (const { correctAnswer, questionNumber } of quiz.quizQuestions) {
       const userAnswer = answers[questionNumber] as number;
       if (userAnswer === correctAnswer) score++;
     }
 
-    return score;
+    const quizResult = {
+      score,
+      userId,
+      quiz,
+    };
+
+    const result = await this.quizResultRepository.save(quizResult);
+
+    return result;
   }
 }
