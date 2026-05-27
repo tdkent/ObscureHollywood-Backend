@@ -103,10 +103,15 @@ export class QuizService {
     if (!quiz) throw new NotFoundException();
 
     let score = 0;
+    // Store questions with correct answers
+    const correct: number[] = [];
 
     for (const { correctAnswer, questionNumber } of quiz.quizQuestions) {
       const userAnswer = answers[questionNumber] as number;
-      if (userAnswer === correctAnswer) score++;
+      if (userAnswer === correctAnswer) {
+        score++;
+        correct.push(questionNumber);
+      }
     }
 
     const quizResult = {
@@ -117,6 +122,14 @@ export class QuizService {
 
     const result = await this.quizResultRepository.save(quizResult);
 
-    return result;
+    const finalResponse = {
+      id: result.id,
+      userId,
+      score: result.score,
+      correct,
+      createdAt: result.createdAt,
+    };
+
+    return finalResponse;
   }
 }
