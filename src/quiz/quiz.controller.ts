@@ -12,6 +12,7 @@ import { GetQuizzesResponseDto } from 'src/quiz/dto/get-quizzes-response.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
 import { GetQuizResponseDto } from 'src/quiz/dto/get-quiz-response.dto';
 import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
+import { CreateQuizResultResponseDto } from 'src/quiz/dto/create-quiz-result-response.dto';
 
 @Controller('quiz')
 export class QuizController {
@@ -60,6 +61,26 @@ export class QuizController {
   }
 
   @Post(':slug/result')
+  @ApiOperation({
+    summary: 'Create results for one attempted quiz.',
+    description:
+      'Calculate score from received answers and add result to database.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the quiz.',
+    example: 'at-the-movies',
+  })
+  @ApiOkResponse({
+    description: 'Object containing score and correct answers.',
+    type: CreateQuizResultResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'One or mores parameters are invalid.',
+  })
+  @ApiNotFoundResponse({
+    description: 'No quiz was found for the provided slug.',
+  })
   createQuizResult(
     @Param() params: SlugDto,
     @Body() reqBody: CreateQuizResultDto,

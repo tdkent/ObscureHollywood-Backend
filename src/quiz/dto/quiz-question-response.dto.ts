@@ -14,7 +14,4 @@ export class QuizQuestionResponseDto {
     example: ['Joan Crawford', 'Loretta Young', 'Kay Francis', 'Marion Davies'],
   })
   answerOptions: string[];
-
-  @ApiProperty({ example: 3 })
-  correctAnswer: number;
 }
