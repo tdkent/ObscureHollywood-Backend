@@ -51,7 +51,7 @@ export class UsersService {
       .innerJoin('quizResult.quiz', 'quiz')
       .where('quizResult.userId = :userId', { userId })
       .andWhere('quiz.slug = :quizSlug', { quizSlug })
-      .select('COUNT(*)', 'count')
+      .select('CAST(COUNT(*) AS INT)', 'count')
       .addSelect('MAX(quizResult.score)', 'highScore')
       .addSelect((subQuery) => {
         return subQuery
