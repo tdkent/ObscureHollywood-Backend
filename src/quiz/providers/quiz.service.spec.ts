@@ -5,6 +5,7 @@ import { QuizService } from 'src/quiz/providers/quiz.service';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Repository } from 'typeorm';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
+import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
 
 describe('QuizService', () => {
   let service: QuizService;
@@ -17,6 +18,12 @@ describe('QuizService', () => {
   > = {
     findAndCount: jest.fn(),
     findOne: jest.fn(),
+  };
+
+  const mockQuizResultRepository: jest.Mocked<
+    Pick<Repository<Partial<QuizResult>>, 'save'>
+  > = {
+    save: jest.fn(),
   };
 
   const mockPaginationProvider = {
@@ -32,6 +39,10 @@ describe('QuizService', () => {
         {
           provide: getRepositoryToken(Quiz),
           useValue: mockQuizRepository,
+        },
+        {
+          provide: getRepositoryToken(QuizResult),
+          useValue: mockQuizResultRepository,
         },
         {
           provide: PaginationProvider,

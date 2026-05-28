@@ -4,7 +4,6 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { validateParams } from 'src/common/utils/validate';
 import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
-import { QuizQuestion } from 'src/quiz/entities/quiz-question.entity';
 import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
 import { Quiz } from 'src/quiz/entities/quiz.entity';
 import { Repository } from 'typeorm';
@@ -17,11 +16,6 @@ export class QuizService {
      */
     @InjectRepository(Quiz)
     private readonly quizRepository: Repository<Quiz>,
-    /**
-     * Quiz Question repository
-     */
-    @InjectRepository(QuizQuestion)
-    private readonly quizQuestionRepository: Repository<QuizQuestion>,
     /**
      * Quiz Result repository
      */
