@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -40,6 +39,5 @@ export class Studio {
   @OneToMany(() => Film, (film) => film.studio, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   films: FilmType[];
 }

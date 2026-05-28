@@ -2,13 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { QuizQuestion } from 'src/quiz/entities/quiz-question.entity';
 import { Exclude } from 'class-transformer';
+import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
 
 export enum Theme {
   FILMS = 'films',
@@ -52,6 +52,10 @@ export class Quiz {
   @OneToMany(() => QuizQuestion, (qq) => qq.quiz, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   quizQuestions: QuizQuestion[];
+
+  @OneToMany(() => QuizResult, (qr) => qr.quiz, {
+    onDelete: 'CASCADE',
+  })
+  quizResults: QuizResult[];
 }

@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
@@ -39,12 +38,10 @@ export class PersonFilm {
   @ManyToOne(() => Person, (person) => person.personFilms, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   person: PersonType;
 
   @ManyToOne(() => Film, (film) => film.personFilms, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   film: FilmType;
 }

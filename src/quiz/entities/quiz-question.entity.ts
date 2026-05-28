@@ -34,6 +34,7 @@ export class QuizQuestion {
   @Column({
     type: 'smallint',
   })
+  @Exclude()
   correctAnswer: number;
 
   @Column({
