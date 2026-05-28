@@ -9,8 +9,8 @@ import {
   ApiBadRequestResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserQuizResponseDto } from 'src/users/dto/quiz-results-response.dto';
-import { UserSingleQuizResponseDto } from 'src/users/dto/quiz-result.dto';
+import { UserQuizResponseDto } from 'src/users/dto/user-all-quiz-response.dto';
+import { UserSingleQuizResponseDto } from 'src/users/dto/user-quiz-response.dto';
 
 @Controller('users')
 @ApiTags('users')
@@ -30,8 +30,8 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'The uuid parameter is invalid.',
   })
-  public findById(@Param() params: GetUserDto) {
-    return this.usersService.findUserQuizResults(params.userId);
+  public findQuizResultsByUserId(@Param() params: GetUserDto) {
+    return this.usersService.findQuizResultsByUserId(params.userId);
   }
 
   @Get(':userId/quiz-results/:slug')
@@ -53,8 +53,8 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: 'One or more parameters is invalid.',
   })
-  public findQuizResultsById(@Param() params: GetUserQuizResultsDto) {
-    return this.usersService.findUserSingleQuizResults(
+  public findSingleQuizResultByUserId(@Param() params: GetUserQuizResultsDto) {
+    return this.usersService.findSingleQuizResultByUserId(
       params.userId,
       params.slug,
     );

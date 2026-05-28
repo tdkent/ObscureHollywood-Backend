@@ -20,7 +20,7 @@ export class UsersService {
   ) {}
 
   /** Get count of quizzes, attempts, average score for all quizzes.  */
-  public async findUserQuizResults(userId: string) {
+  public async findQuizResultsByUserId(userId: string) {
     const result = (await this.quizResultRepository
       .createQueryBuilder('quizResult')
       .where('quizResult.userId = :userId', { userId })
@@ -45,7 +45,7 @@ export class UsersService {
   }
 
   /** Get count of attempts, high score, and most recent score for a single quiz. */
-  public async findUserSingleQuizResults(userId: string, quizSlug: string) {
+  public async findSingleQuizResultByUserId(userId: string, quizSlug: string) {
     return this.quizResultRepository
       .createQueryBuilder('quizResult')
       .innerJoin('quizResult.quiz', 'quiz')
