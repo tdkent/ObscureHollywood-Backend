@@ -8,11 +8,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get(':userId')
   public findById(@Param() params: GetUserDto) {
-    return this.usersService.findById(params.userId);
+    return this.usersService.findUserQuizResults(params.userId);
   }
 
   @Get(':userId/quiz-results/:slug')
   public findQuizResultsById(@Param() params: GetUserQuizResultsDto) {
-    return this.usersService.findQuizResultsById(params.userId, params.slug);
+    return this.usersService.findUserSingleQuizResults(
+      params.userId,
+      params.slug,
+    );
   }
 }

@@ -11,14 +11,32 @@ export class UsersService {
     private readonly quizResultRepository: Repository<QuizResult>,
   ) {}
 
-  public findById(userId: string) {
+  public findUserQuizResults(userId: string) {
     return this.quizResultRepository.find({
       where: { userId },
       relations: { quiz: true },
     });
   }
 
-  public findQuizResultsById(userId: string, quizSlug: string) {
-    return { userId, quizSlug };
+  /** Get count of attempts, high score, and most recent score. */
+  public async findUserSingleQuizResults(userId: string, quizSlug: string) {
+    return this.quizResultRepository
+      .createQueryBuilder('quizResult')
+      .innerJoin('quizResult.quiz', 'quiz')
+      .where('quizResult.userId = :userId', { userId })
+      .andWhere('quiz.slug = :quizSlug', { quizSlug })
+      .select('COUNT(*)', 'count')
+      .addSelect('MAX(quizResult.score)', 'highScore')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('quizResult.score', 'prevScore')
+          .from(QuizResult, 'quizResult')
+          .innerJoin('quizResult.quiz', 'quiz')
+          .where('quizResult.userId = :userId', { userId })
+          .andWhere('quiz.slug = :quizSlug', { quizSlug })
+          .orderBy('quizResult.createdAt', 'DESC')
+          .limit(1);
+      })
+      .getRawOne();
   }
 }
