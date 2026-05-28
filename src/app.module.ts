@@ -13,6 +13,7 @@ import { PersonsModule } from './persons/persons.module';
 import { StudiosModule } from './studios/studios.module';
 import { TagsModule } from './tags/tags.module';
 import { QuizModule } from './quiz/quiz.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { QuizModule } from './quiz/quiz.module';
     QuizModule,
     StudiosModule,
     TagsModule,
+    UsersModule,
   ],
   providers: [
     /**
