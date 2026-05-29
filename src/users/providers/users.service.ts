@@ -41,7 +41,22 @@ export class UsersService {
       Number((result.distinctCount / result.quizCount) * 100),
     );
 
-    return { ...result, avgScore: Number(result.avgScore), percentComplete };
+    // Get recent activity
+    const recentActivity = await this.quizResultRepository.find({
+      where: { userId },
+      relations: {
+        quiz: true,
+      },
+      order: { createdAt: 'DESC' },
+      take: 10,
+    });
+
+    return {
+      ...result,
+      avgScore: Number(result.avgScore),
+      percentComplete,
+      recentActivity,
+    };
   }
 
   /** Get count of attempts, high score, and most recent score for a single quiz. */

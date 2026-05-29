@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
 
 export class UserQuizResponseDto {
   @ApiProperty({ example: 10 })
@@ -15,4 +16,7 @@ export class UserQuizResponseDto {
 
   @ApiProperty({ example: 10 })
   percentComplete: number;
+
+  @ApiProperty({ example: [] })
+  recentActivity: QuizResult[];
 }
