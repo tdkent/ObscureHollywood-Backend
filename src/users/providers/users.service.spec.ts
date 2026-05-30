@@ -8,7 +8,7 @@ describe('UsersService', () => {
   let service: UsersService;
 
   let repository: jest.Mocked<
-    Pick<Repository<Partial<QuizResult>>, 'createQueryBuilder'>
+    Pick<Repository<Partial<QuizResult>>, 'createQueryBuilder' | 'find'>
   >;
 
   // Mock createQueryBuilder object and all methods used in service
@@ -22,9 +22,10 @@ describe('UsersService', () => {
   } as unknown as SelectQueryBuilder<Partial<QuizResult>>;
 
   const mockQuizResultRepository: jest.Mocked<
-    Pick<Repository<Partial<QuizResult>>, 'createQueryBuilder'>
+    Pick<Repository<Partial<QuizResult>>, 'createQueryBuilder' | 'find'>
   > = {
     createQueryBuilder: jest.fn(() => mockQueryBuilder),
+    find: jest.fn(),
   };
 
   beforeEach(async () => {
