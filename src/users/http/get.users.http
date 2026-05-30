@@ -1,0 +1,9 @@
+### Get a single user's data by user id.
+# GET /users/:userId
+# Sends a single user data object with quiz results.
+GET {{localBaseUrl}}/users/{{userId}}
+
+### Find user's results for a single quiz.
+# GET /users/:userId/quiz-results/:slug
+# Sends an array of quiz results.
+GET {{localBaseUrl}}/users/{{userId}}/quiz-results/at-the-movies

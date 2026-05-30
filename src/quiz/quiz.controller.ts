@@ -7,6 +7,7 @@ import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { GetQuizzesResponseDto } from 'src/quiz/dto/get-quizzes-response.dto';
 import { SlugDto } from 'src/common/dtos/slug.dto';
@@ -15,6 +16,7 @@ import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
 import { CreateQuizResultResponseDto } from 'src/quiz/dto/create-quiz-result-response.dto';
 
 @Controller('quiz')
+@ApiTags('quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 

@@ -18,7 +18,7 @@ POST {{localBaseUrl}}/quiz/at-the-movies/result
 Content-Type: application/json
 
 {
-  "userId": "52809afb-151d-44bc-9cd3-0f3161c1bd46",
+  "userId": {{userId}},
   "answers": {
     "1": "1",
     "2": "2",
