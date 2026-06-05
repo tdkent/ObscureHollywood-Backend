@@ -22,7 +22,7 @@ async function bootstrap() {
    * CORS
    */
   app.enableCors({
-    origin: [process.env.FRONTEND_DEV_URL, process.env.FRONTEND_PREVIEW_URL],
+    origin: [process.env.FRONTEND_URL],
     methods: ['GET'],
   });
 
