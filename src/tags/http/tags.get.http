@@ -2,11 +2,16 @@
 # GET /tags
 # Sends an array of tags.
 GET {{localBaseUrl}}/tags
-?limit=10
-&page=1
-&orderBy=nameAsc
 
 ### Find a single tag
 # GET /tags/:slug
 # Sends a single tag with relations
 GET {{localBaseUrl}}/tags/decade-1930s
+
+### Find films by single tag
+# GET /tags/:slug/films
+# Sends an array of films.
+GET {{localBaseUrl}}/tags/decade-1930s/films
+?page=1
+&limit=25
+&orderBy=yearAsc

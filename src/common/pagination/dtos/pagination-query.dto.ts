@@ -1,18 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsPositive } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class PaginationQueryDto {
   @ApiProperty({
-    description: 'Maximum results to return per page. Default: 10.',
-    example: 10,
+    description: 'Maximum results to return per page.',
+    example: '25',
   })
-  @IsIn([10, 25])
-  limit: number = 10;
+  @IsString()
+  limit: string = '25';
 
   @ApiProperty({
-    description: 'Pagination page. Default: 1.',
-    example: 1,
+    description: 'Pagination page.',
+    example: '1',
   })
-  @IsPositive()
-  page: number = 1;
+  @IsString()
+  page: string = '1';
 }

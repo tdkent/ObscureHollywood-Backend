@@ -41,7 +41,11 @@ describe('PersonsController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetPersonsDto = { limit: 10, page: 1, orderBy: 'lastNameAsc' };
+    const query: GetPersonsDto = {
+      limit: '25',
+      page: '1',
+      orderBy: 'lastNameAsc',
+    };
 
     it('should call findAll service once', async () => {
       await service.findAll(query);

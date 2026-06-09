@@ -8,9 +8,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { SlugDto } from 'src/common/dtos/slug.dto';
+import { GetFilmsResponseDto } from 'src/films/dto/get-films-response.dto';
 import { GetTagResponseDto } from 'src/tags/dto/get-tag-response.dto';
-import { GetTagsDto } from 'src/tags/dto/get-tag.dto';
-import { GetTagsResponseDto } from 'src/tags/dto/get-tags-response.dto';
+import { GetFilmsByTagDto } from 'src/tags/dto/get-tag.dto';
+import { TagResponseDto } from 'src/tags/dto/tag-response.dto';
 import { TagsService } from 'src/tags/providers/tags.service';
 
 @Controller('tags')
@@ -21,18 +22,14 @@ export class TagsController {
   @Get()
   @ApiOperation({
     summary: 'Get tags',
-    description:
-      'Returns a paginated list of tags. Supports pagination and sorting query parameters.',
+    description: 'Returns a list of all tags sorted by type and name.',
   })
   @ApiOkResponse({
     description: 'An array of tags or an empty array if no data can be found.',
-    type: GetTagsResponseDto,
+    type: [TagResponseDto],
   })
-  @ApiBadRequestResponse({
-    description: 'One or more query parameters are invalid.',
-  })
-  findAll(@Query() reqQuery: GetTagsDto) {
-    return this.tagsService.findAll(reqQuery);
+  findAll() {
+    return this.tagsService.findAll();
   }
 
   @Get(':slug')
@@ -57,5 +54,30 @@ export class TagsController {
   })
   findOne(@Param() reqParams: SlugDto) {
     return this.tagsService.findOne(reqParams.slug);
+  }
+
+  @Get(':slug/films')
+  @ApiOperation({
+    summary: 'Get films by tag',
+    description:
+      'Returns a paginated list of films. Supports pagination and sorting query parameters.',
+  })
+  @ApiParam({
+    name: 'slug',
+    description: 'Unique slug to identify the tag.',
+    example: 'decade-1930s',
+  })
+  @ApiOkResponse({
+    description: 'An array of films or an empty array if no data can be found.',
+    type: GetFilmsResponseDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Slug parameter or one or more query parameters are invalid.',
+  })
+  findFilmsByTag(
+    @Param() reqParams: SlugDto,
+    @Query() reqQuery: GetFilmsByTagDto,
+  ) {
+    return this.tagsService.findFilmsByTag(reqParams.slug, reqQuery);
   }
 }

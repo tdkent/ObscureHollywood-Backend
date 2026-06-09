@@ -2,11 +2,16 @@
 # GET /films
 # Sends an array of films.
 GET {{localBaseUrl}}/films
-?limit=10
+?limit=25
 &page=1
 &orderBy=nameAsc
 &tag=decade-1930s
 &tag=genre-drama
+
+### Find recent films
+# GET /films/recent
+# Sends array of most recent films.
+GET {{localBaseUrl}}/films/recent
 
 ### Find a single film
 # GET /films/:slug

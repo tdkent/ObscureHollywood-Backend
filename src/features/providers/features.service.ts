@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Feature } from 'src/features/entities/feature.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class FeaturesService {
@@ -23,23 +24,43 @@ export class FeaturesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetFeaturesDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
 
-    const features = await this.featuresRepository.find({
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'features',
+    });
+
+    const [data, count] = await this.featuresRepository.findAndCount({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
       take: limit,
       skip: (page - 1) * limit,
     });
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.featuresRepository,
-        limit,
-        page,
-        data: features,
-      });
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      limit,
+      orderBy,
+      page,
+      data,
+      totalItems: count,
+    });
 
     return finalResponse;
+  }
+
+  public async findRecent() {
+    return this.featuresRepository.find({
+      take: 3,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   /**

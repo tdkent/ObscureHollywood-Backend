@@ -12,8 +12,7 @@ async function bootstrap() {
    * Swagger Documentation
    */
   const config = new DocumentBuilder()
-    .setTitle('Obscure Hollywood - Server REST API')
-    .setDescription('Base API URL is http://localhost:3000')
+    .setTitle('Obscure Hollywood - REST Server API Documentation')
     .setVersion('1.0')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
@@ -23,8 +22,8 @@ async function bootstrap() {
    * CORS
    */
   app.enableCors({
-    origin: [process.env.FRONTEND_DEV_URL],
-    methods: ['GET'],
+    origin: [process.env.FRONTEND_URL],
+    methods: 'GET,POST',
   });
 
   /**
@@ -37,9 +36,11 @@ async function bootstrap() {
    */
   app.useGlobalPipes(
     new ValidationPipe({
+      /**
+       * Unknown URL params are stripped but do not throw an error.
+       */
       whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
+      forbidNonWhitelisted: false,
       /**
        * Implicitly convert types (replaces Type decorator in DTO)
        */

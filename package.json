@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --ignore-unknown --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start --env-file .env",
+    "start": "node dist/main.js",
     "start:dev": "NODE_ENV=development nest start --env-file .env --watch",
     "start:debug": "nest start --env-file .env --debug --watch",
     "start:prod": "node --env-file=.env dist/main",
@@ -25,11 +25,12 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
-    "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.1.19",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
-    "@nestjs/swagger": "^11.2.6",
+    "@nestjs/swagger": "^11.3.0",
+    "@nestjs/throttler": "^6.5.0",
     "@nestjs/typeorm": "^11.0.0",
     "@sentry/nestjs": "^10.44.0",
     "class-transformer": "^0.5.1",
@@ -38,7 +39,8 @@
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.28"
+    "typeorm": "^0.3.28",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

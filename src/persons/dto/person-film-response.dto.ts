@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FilmResponseDto } from 'src/films/dto/film-response.dto';
 import { PersonResponseDto } from 'src/persons/dto/person-response.dto';
 
 class PersonFilm {
@@ -12,7 +13,12 @@ class PersonFilm {
   castPosition: number | null;
 }
 
-export class PersonFilmResponseDto extends PersonFilm {
+export class PersonFilmWithPersonResponseDto extends PersonFilm {
   @ApiProperty({ type: PersonResponseDto })
   person: PersonResponseDto;
+}
+
+export class PersonFilmWithFilmResponseDto extends PersonFilm {
+  @ApiProperty({ type: FilmResponseDto })
+  film: FilmResponseDto;
 }

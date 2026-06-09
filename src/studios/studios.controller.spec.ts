@@ -1,7 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StudiosController } from './studios.controller';
 import { StudiosService } from './providers/studios.service';
-import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
+import {
+  GetFilmsByStudioDto,
+  GetStudiosDto,
+} from 'src/studios/dto/get-studio.dto';
 import { PaginatedResponse } from 'src/common/pagination/interfaces/paginated-response.interface';
 import { Studio } from 'src/studios/entities/studio.entity';
 
@@ -11,11 +14,13 @@ describe('StudiosController', () => {
 
   const mockStudiosService = {
     findAll: jest.fn(),
+    findFilmsByStudio: jest.fn(),
     findOne: jest.fn(),
   };
 
   beforeEach(async () => {
     mockStudiosService.findAll.mockResolvedValue([]);
+    mockStudiosService.findFilmsByStudio.mockResolvedValue([]);
     mockStudiosService.findOne.mockResolvedValue(null);
 
     const module: TestingModule = await Test.createTestingModule({
@@ -41,7 +46,7 @@ describe('StudiosController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetStudiosDto = { limit: 10, page: 1, orderBy: 'nameAsc' };
+    const query: GetStudiosDto = { limit: '25', page: '1', orderBy: 'nameAsc' };
 
     it('should call findAll service once', async () => {
       await service.findAll(query);
@@ -91,6 +96,34 @@ describe('StudiosController', () => {
       mockStudiosService.findOne.mockResolvedValue(studio);
       const result = await service.findOne(slug);
       expect(result).toBe(studio);
+    });
+  });
+
+  describe('findFilmsByStudio', () => {
+    const slug = 'paramount-pictures';
+    const query: GetFilmsByStudioDto = {
+      limit: '25',
+      page: '1',
+      orderBy: 'nameAsc',
+    };
+
+    it('should call findFilmsByStudio service once', async () => {
+      await service.findFilmsByStudio(slug, query);
+      expect(service.findFilmsByStudio).toHaveBeenCalledTimes(1);
+    });
+
+    it('should pass the slug to the findFilmsByStudio service', async () => {
+      await service.findFilmsByStudio(slug, query);
+      expect(service.findFilmsByStudio).toHaveBeenCalledWith(slug, query);
+    });
+
+    it('should return an array of films', async () => {
+      mockStudiosService.findFilmsByStudio.mockResolvedValue([
+        { id: 1 },
+        { id: 2 },
+      ]);
+      const result = await service.findFilmsByStudio(slug, query);
+      expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
   });
 });

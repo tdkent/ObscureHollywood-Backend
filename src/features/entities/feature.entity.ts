@@ -27,6 +27,12 @@ export class Feature {
   @Column({
     type: 'varchar',
     length: 64,
+  })
+  subtitle: string;
+
+  @Column({
+    type: 'varchar',
+    length: 64,
     unique: true,
   })
   slug: string;
