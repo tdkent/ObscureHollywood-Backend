@@ -35,6 +35,11 @@ export class FilmsController {
     return this.filmsService.findAll(reqQuery);
   }
 
+  @Get('recent')
+  findRecent() {
+    return this.filmsService.findRecent();
+  }
+
   @Get(':slug')
   @ApiOperation({
     summary: 'Get one film by unique slug',

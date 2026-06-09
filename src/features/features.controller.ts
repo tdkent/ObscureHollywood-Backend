@@ -36,6 +36,11 @@ export class FeaturesController {
     return this.featuresService.findAll(reqQuery);
   }
 
+  @Get('recent')
+  findRecent() {
+    return this.featuresService.findRecent();
+  }
+
   @Get(':slug')
   @ApiOperation({
     summary: 'Get one feature by unique slug',

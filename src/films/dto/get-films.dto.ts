@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsIn, IsOptional, IsString, Length } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 class GetFilmsBaseDto {
@@ -8,8 +8,8 @@ class GetFilmsBaseDto {
     description: "Option to sort film list. Default: 'nameAsc'.",
     example: 'nameAsc',
   })
-  @IsIn(['nameAsc', 'nameDesc', 'yearAsc', 'yearDesc'])
-  orderBy: 'nameAsc' | 'nameDesc' | 'yearAsc' | 'yearDesc' = 'nameAsc';
+  @IsString()
+  orderBy: string = 'nameAsc';
 
   @IsOptional()
   // Need to transform bc single tag query will not naturally map to []
@@ -19,7 +19,6 @@ class GetFilmsBaseDto {
   })
   @IsArray()
   @IsString({ each: true })
-  @Length(6, 64, { each: true })
   tag?: string[];
 }
 

@@ -1,0 +1,34 @@
+### Find all quizzes with pagination queries
+# GET /quiz
+# Sends an array of quizzes.
+GET {{localBaseUrl}}/quiz
+?limit=25
+&page=1
+&orderBy=nameAsc
+
+### Find a single quiz
+# GET /quiz/:slug
+# Sends a single quiz with QuizQuestion relations.
+GET {{localBaseUrl}}/quiz/at-the-movies
+
+### Create a single quiz result
+# POST /quiz/:slug/result
+# Create and send result of a single quiz.
+POST {{localBaseUrl}}/quiz/at-the-movies/result
+Content-Type: application/json
+
+{
+  "userId": {{userId}},
+  "answers": {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "1",
+    "6": "2",
+    "7": "3",
+    "8": "4",
+    "9": "1",
+    "10": "2"
+  }
+}

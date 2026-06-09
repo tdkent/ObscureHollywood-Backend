@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
 import { Person } from 'src/persons/entities/person.entity';
 import { IsNull, Not, Repository } from 'typeorm';
@@ -22,9 +23,20 @@ export class PersonsService {
    * Send a list of persons with pagination and sorting.
    */
   public async findAll(reqQuery: GetPersonsDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
 
-    const persons = await this.personsRepository.find({
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'people',
+    });
+
+    const [data, count] = await this.personsRepository.findAndCount({
       where: {
         article: Not(IsNull()),
       },
@@ -40,22 +52,27 @@ export class PersonsService {
       skip: (page - 1) * limit,
     });
 
-    const count = await this.personsRepository.count({
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data,
+      limit,
+      orderBy,
+      page,
+      totalItems: count,
+    });
+
+    return finalResponse;
+  }
+
+  public async findRecent() {
+    return this.personsRepository.find({
       where: {
         article: Not(IsNull()),
       },
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 3,
     });
-
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.personsRepository,
-        limit,
-        page,
-        data: persons,
-        count,
-      });
-
-    return finalResponse;
   }
 
   public async findOne(slug: string) {

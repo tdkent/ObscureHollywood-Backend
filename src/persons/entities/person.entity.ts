@@ -43,6 +43,12 @@ export class Person {
   lastName: string;
 
   @Column({
+    type: 'varchar',
+    length: 64,
+  })
+  name: string;
+
+  @Column({
     type: 'date',
     nullable: true,
   })
@@ -53,6 +59,12 @@ export class Person {
     nullable: true,
   })
   deathDate: Date;
+
+  @Column({
+    type: 'smallint',
+    nullable: true,
+  })
+  age: number;
 
   @Column({
     type: 'varchar',

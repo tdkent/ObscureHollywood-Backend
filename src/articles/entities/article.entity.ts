@@ -29,6 +29,12 @@ export class Article {
   @Column({
     type: 'varchar',
     length: 64,
+  })
+  name: string;
+
+  @Column({
+    type: 'varchar',
+    length: 64,
     unique: true,
   })
   slug: string;
@@ -47,6 +53,7 @@ export class Article {
   @Column({
     type: 'text',
   })
+  @Exclude()
   textContent: string;
 
   @CreateDateColumn()

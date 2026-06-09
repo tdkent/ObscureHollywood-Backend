@@ -1,7 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { GetStudiosDto } from 'src/studios/dto/get-studio.dto';
+import { validateParams } from 'src/common/utils/validate';
+import { Film } from 'src/films/entities/film.entity';
+import {
+  GetFilmsByStudioDto,
+  GetStudiosDto,
+} from 'src/studios/dto/get-studio.dto';
 import { Studio } from 'src/studios/entities/studio.entity';
 import { Repository } from 'typeorm';
 
@@ -14,26 +19,42 @@ export class StudiosService {
     @InjectRepository(Studio)
     private studiosRepository: Repository<Studio>,
     /**
+     * Films repository
+     */
+    @InjectRepository(Film)
+    private filmsRepository: Repository<Film>,
+    /**
      * Pagination provider
      */
     private paginationProvider: PaginationProvider,
   ) {}
   public async findAll(reqQuery: GetStudiosDto) {
-    const { limit, orderBy, page } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
 
-    const studios = await this.studiosRepository.find({
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'studios',
+    });
+
+    const [data, count] = await this.studiosRepository.findAndCount({
       order: orderBy === 'nameAsc' ? { name: 'ASC' } : { name: 'DESC' },
       take: limit,
       skip: (page - 1) * limit,
     });
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.studiosRepository,
-        limit,
-        page,
-        data: studios,
-      });
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data,
+      limit,
+      orderBy,
+      page,
+      totalItems: count,
+    });
 
     return finalResponse;
   }
@@ -51,5 +72,48 @@ export class StudiosService {
     if (!studio) throw new NotFoundException();
 
     return studio;
+  }
+
+  public async findFilmsByStudio(slug: string, reqQuery: GetFilmsByStudioDto) {
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'films',
+    });
+
+    const [films, count] = await this.filmsRepository.findAndCount({
+      where: {
+        studio: {
+          slug,
+        },
+      },
+      order:
+        orderBy === 'nameDesc'
+          ? { name: 'DESC', releaseYear: 'ASC' }
+          : orderBy === 'yearAsc'
+            ? { releaseYear: 'ASC', name: 'ASC' }
+            : orderBy === 'yearDesc'
+              ? { releaseYear: 'DESC', name: 'ASC' }
+              : { name: 'ASC', releaseYear: 'ASC' },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: films,
+      limit,
+      orderBy,
+      page,
+      totalItems: count,
+    });
+
+    return finalResponse;
   }
 }

@@ -13,8 +13,8 @@ import {
 import { GetPersonsResponseDto } from 'src/persons/dto/get-persons-response.dto';
 import { GetPersonResponseDto } from 'src/persons/dto/get-person-response.dto';
 
-@Controller('persons')
-@ApiTags('persons')
+@Controller('people')
+@ApiTags('people')
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
 
@@ -34,6 +34,11 @@ export class PersonsController {
   @Get()
   findAll(@Query() reqQuery: GetPersonsDto) {
     return this.personsService.findAll(reqQuery);
+  }
+
+  @Get('recent')
+  findRecent() {
+    return this.personsService.findRecent();
   }
 
   @Get(':slug')

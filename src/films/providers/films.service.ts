@@ -4,6 +4,7 @@ import { GetFilmsDto } from 'src/films/dto/get-films.dto';
 import { Film } from 'src/films/entities/film.entity';
 import { Repository } from 'typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { validateParams } from 'src/common/utils/validate';
 
 @Injectable()
 export class FilmsService {
@@ -23,7 +24,19 @@ export class FilmsService {
    * Send a list of films with pagination and sorting.
    */
   public async findAll(reqQuery: GetFilmsDto) {
-    const { limit, orderBy, page, tag: tags } = reqQuery;
+    const {
+      limit: limitParam,
+      orderBy: orderParam,
+      page: pageParam,
+      tag: tags,
+    } = reqQuery;
+
+    const { limit, orderBy, page } = validateParams({
+      limitParam,
+      orderParam,
+      pageParam,
+      route: 'films',
+    });
 
     const sortField =
       orderBy === 'nameAsc' || orderBy === 'nameDesc'
@@ -33,9 +46,10 @@ export class FilmsService {
       orderBy === 'nameAsc' || orderBy === 'yearAsc' ? 'ASC' : 'DESC';
 
     let films: Film[];
-    let count: number | undefined;
+    let totalItems: number;
 
     if (tags) {
+      //? Combine into a single query with window function to get count?
       const rows = await this.filmsRepository
         .createQueryBuilder('film')
         .innerJoin('film.filmTags', 'filmTag')
@@ -46,7 +60,7 @@ export class FilmsService {
         .having('COUNT(*) = :count', { count: tags.length })
         .getMany();
 
-      count = rows.length;
+      totalItems = rows.length;
 
       films = await this.filmsRepository
         .createQueryBuilder('film')
@@ -67,18 +81,29 @@ export class FilmsService {
         .take(limit)
         .skip((page - 1) * limit)
         .getMany();
+
+      totalItems = await this.filmsRepository.count();
     }
 
-    const finalResponse =
-      await this.paginationProvider.createPaginationMetadata({
-        repository: this.filmsRepository,
-        limit,
-        page,
-        data: films,
-        count,
-      });
+    const finalResponse = this.paginationProvider.createPaginationMetadata({
+      data: films,
+      limit,
+      orderBy,
+      page,
+      tags,
+      totalItems,
+    });
 
     return finalResponse;
+  }
+
+  public async findRecent() {
+    return this.filmsRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 3,
+    });
   }
 
   /**
