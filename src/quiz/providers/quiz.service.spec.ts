@@ -6,6 +6,7 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { Repository } from 'typeorm';
 import { GetQuizzesDto } from 'src/quiz/dto/get-quizzes.dto';
 import { QuizResult } from 'src/quiz/entities/quiz-result.entity';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 describe('QuizService', () => {
   let service: QuizService;
@@ -65,7 +66,6 @@ describe('QuizService', () => {
 
   describe('findAll', () => {
     const query: GetQuizzesDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };
@@ -75,9 +75,9 @@ describe('QuizService', () => {
 
       expect(repository.findAndCount).toHaveBeenCalledTimes(1);
       expect(repository.findAndCount).toHaveBeenCalledWith({
-        take: Number(query.limit),
         skip: (Number(query.page) - 1) * 10,
         order: { name: 'ASC' },
+        take: PAGINATION_TAKE_COUNT,
       });
     });
 

@@ -5,6 +5,7 @@ import { FeaturesService } from 'src/features/providers/features.service';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Repository } from 'typeorm';
 import { GetFeaturesDto } from 'src/features/dto/get-features.dto';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 describe('FeaturesService', () => {
   let service: FeaturesService;
@@ -54,7 +55,6 @@ describe('FeaturesService', () => {
 
   describe('findAll', () => {
     const query: GetFeaturesDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };
@@ -64,9 +64,9 @@ describe('FeaturesService', () => {
 
       expect(repository.findAndCount).toHaveBeenCalledTimes(1);
       expect(repository.findAndCount).toHaveBeenCalledWith({
-        take: Number(query.limit),
         skip: (Number(query.page) - 1) * 10,
         order: { name: 'ASC' },
+        take: PAGINATION_TAKE_COUNT,
       });
     });
 

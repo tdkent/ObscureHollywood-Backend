@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
 import { GetPersonsDto } from 'src/persons/dto/get-persons.dto';
@@ -23,14 +24,9 @@ export class PersonsService {
    * Send a list of persons with pagination and sorting.
    */
   public async findAll(reqQuery: GetPersonsDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'people',
@@ -48,13 +44,12 @@ export class PersonsService {
             : orderBy === 'firstNameDesc'
               ? { firstName: 'DESC', lastName: 'DESC' }
               : { lastName: 'ASC', firstName: 'ASC' },
-      take: limit,
-      skip: (page - 1) * limit,
+      take: PAGINATION_TAKE_COUNT,
+      skip: (page - 1) * PAGINATION_TAKE_COUNT,
     });
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
       data,
-      limit,
       orderBy,
       page,
       totalItems: count,

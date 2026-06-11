@@ -69,7 +69,7 @@ describe('StudiosService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetStudiosDto = { limit: '25', orderBy: 'nameAsc', page: '1' };
+    const query: GetStudiosDto = { orderBy: 'nameAsc', page: '1' };
 
     it('should call repository.findAndCount()', async () => {
       await service.findAll(query);
@@ -78,7 +78,6 @@ describe('StudiosService', () => {
 
       expect(repository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
-          take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
           order: { name: 'ASC' },
         }),
@@ -151,7 +150,6 @@ describe('StudiosService', () => {
   describe('findFilmsByStudio', () => {
     const params = { slug: 'paramount-pictures' };
     const query: GetFilmsByStudioDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };
@@ -163,7 +161,6 @@ describe('StudiosService', () => {
 
       expect(filmRepository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
-          take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
           order: { name: 'ASC', releaseYear: 'ASC' },
         }),

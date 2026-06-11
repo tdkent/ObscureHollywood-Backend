@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 class PaginationMetaDto {
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: PAGINATION_TAKE_COUNT })
   itemsPerPage: number;
 
   @ApiProperty({ example: 178 })
@@ -16,24 +17,24 @@ class PaginationMetaDto {
   @ApiProperty({ example: 1 })
   firstItemOnPage: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: PAGINATION_TAKE_COUNT })
   lastItemOnPage: number;
 }
 
 class PaginationLinksDto {
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   first: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=18' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=18' })
   last: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   current: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=2' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=2' })
   next: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   previous: string;
 }
 

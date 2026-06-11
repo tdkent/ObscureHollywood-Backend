@@ -2,8 +2,7 @@
 # GET /studios
 # Sends an array of studios.
 GET {{localBaseUrl}}/studios
-?limit=25
-&page=1
+?page=1
 &orderBy=nameAsc
 
 ### Find a single studio
@@ -15,6 +14,5 @@ GET {{localBaseUrl}}/studios/paramount-pictures
 # GET /studios/:slug/films
 # Sends an array of films.
 GET {{localBaseUrl}}/studios/paramount-pictures/films
-?limit=25
-&page=1
+?page=1
 &orderBy=yearAsc

@@ -103,7 +103,6 @@ describe('TagsService', () => {
   describe('findFilmsByTag', () => {
     const params = { slug: 'decade-1930s' };
     const query: GetFilmsByTagDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };
@@ -114,7 +113,6 @@ describe('TagsService', () => {
       expect(filmRepository.findAndCount).toHaveBeenCalledTimes(1);
       expect(filmRepository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
-          take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
           order: { name: 'ASC', releaseYear: 'ASC' },
         }),

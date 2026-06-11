@@ -5,6 +5,7 @@ import { Feature } from 'src/features/entities/feature.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 @Injectable()
 export class FeaturesService {
@@ -24,14 +25,9 @@ export class FeaturesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetFeaturesDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'features',
@@ -39,12 +35,11 @@ export class FeaturesService {
 
     const [data, count] = await this.featuresRepository.findAndCount({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
-      take: limit,
-      skip: (page - 1) * limit,
+      take: PAGINATION_TAKE_COUNT,
+      skip: (page - 1) * PAGINATION_TAKE_COUNT,
     });
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
-      limit,
       orderBy,
       page,
       data,

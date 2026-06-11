@@ -42,7 +42,6 @@ describe('QuizController', () => {
 
   describe('findAll', () => {
     const query: GetQuizzesDto = {
-      limit: '25',
       page: '1',
       orderBy: 'nameAsc',
     };

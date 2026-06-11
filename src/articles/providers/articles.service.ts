@@ -4,6 +4,7 @@ import { GetArticlesDto } from 'src/articles/dto/get-articles.dto';
 import { DataSource } from 'typeorm';
 import { ArticleResponse } from 'src/articles/dto/article-response.dto';
 import { validateParams } from 'src/common/utils/validate';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 @Injectable()
 export class ArticlesService {
@@ -22,15 +23,9 @@ export class ArticlesService {
    * Send a list of features with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-      q: searchString,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam, q: searchString } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'articles',
@@ -87,8 +82,8 @@ export class ArticlesService {
           { searchString: `%${searchString}%` },
         )
         .orderBy('name', sortDirection)
-        .take(limit)
-        .skip((page - 1) * limit)
+        .take(PAGINATION_TAKE_COUNT)
+        .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getRawMany();
 
       const results = searchResultsQb as (ArticleResponse & {
@@ -110,7 +105,6 @@ export class ArticlesService {
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
       data: articles,
-      limit,
       orderBy,
       page,
       q: searchString,

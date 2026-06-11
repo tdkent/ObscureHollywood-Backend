@@ -42,7 +42,6 @@ describe('FeaturesController', () => {
 
   describe('findAll', () => {
     const query: GetFeaturesDto = {
-      limit: '25',
       page: '1',
       orderBy: 'nameAsc',
     };

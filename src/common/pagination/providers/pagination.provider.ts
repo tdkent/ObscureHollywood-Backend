@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PaginatedResponse } from 'src/common/pagination/interfaces/paginated-response.interface';
 import { ObjectLiteral } from 'typeorm';
 import { CreatePaginationMetadataInputs } from 'src/common/pagination/interfaces/create-metadata-inputs.interface';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 @Injectable()
 export class PaginationProvider {
   constructor() {}
   public createPaginationMetadata<T extends ObjectLiteral>({
     data,
-    limit,
     orderBy,
     page,
     q: searchString,
@@ -18,14 +18,16 @@ export class PaginationProvider {
     /**
      * Calculate items metadata
      */
-    const firstItemOnPage = (page - 1) * limit + 1;
+    const firstItemOnPage = (page - 1) * PAGINATION_TAKE_COUNT + 1;
     const lastItemOnPage =
-      page * limit < totalItems ? page * limit : totalItems;
+      page * PAGINATION_TAKE_COUNT < totalItems
+        ? page * PAGINATION_TAKE_COUNT
+        : totalItems;
 
     /**
      * Calculate pages metadata
      */
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalPages = Math.ceil(totalItems / PAGINATION_TAKE_COUNT);
     const nextPage = page >= totalPages ? totalPages : page + 1;
     const prevPage =
       page >= totalPages ? totalPages - 1 : page <= 1 ? 1 : page - 1;
@@ -33,7 +35,7 @@ export class PaginationProvider {
     /**
      * Query string w/o page params
      */
-    const nonPageParams = `&limit=${limit}&orderBy=${orderBy}`;
+    const sortParam = `&orderBy=${orderBy}`;
     const searchParam = searchString ? `&q=${searchString}` : '';
     const tagParams = tags && tags.length ? `&tag=${tags.join('&tag=')}` : '';
 
@@ -43,7 +45,7 @@ export class PaginationProvider {
     const responseWithMetadata: PaginatedResponse<T> = {
       data,
       meta: {
-        itemsPerPage: limit,
+        itemsPerPage: PAGINATION_TAKE_COUNT,
         totalItems,
         currentPage: page,
         totalPages,
@@ -51,11 +53,11 @@ export class PaginationProvider {
         lastItemOnPage,
       },
       links: {
-        first: `page=1${nonPageParams}${searchParam}${tagParams}`,
-        last: `page=${totalPages}${nonPageParams}${searchParam}${tagParams}`,
-        current: `page=${page}${nonPageParams}${searchParam}${tagParams}`,
-        next: `page=${nextPage}${nonPageParams}${searchParam}${tagParams}`,
-        previous: `page=${prevPage}${nonPageParams}${searchParam}${tagParams}`,
+        first: `page=1${sortParam}${searchParam}${tagParams}`,
+        last: `page=${totalPages}${sortParam}${searchParam}${tagParams}`,
+        current: `page=${page}${sortParam}${searchParam}${tagParams}`,
+        next: `page=${nextPage}${sortParam}${searchParam}${tagParams}`,
+        previous: `page=${prevPage}${sortParam}${searchParam}${tagParams}`,
       },
     };
 
