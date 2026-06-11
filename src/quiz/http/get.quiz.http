@@ -2,8 +2,7 @@
 # GET /quiz
 # Sends an array of quizzes.
 GET {{localBaseUrl}}/quiz
-?limit=25
-&page=1
+?page=1
 &orderBy=nameAsc
 
 ### Find a single quiz

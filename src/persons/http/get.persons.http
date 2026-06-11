@@ -2,8 +2,7 @@
 # GET /people
 # Sends an array of persons.
 GET {{localBaseUrl}}/people
-?limit=25
-&page=1
+?page=1
 &orderBy=lastNameAsc
 
 ### Find recent people

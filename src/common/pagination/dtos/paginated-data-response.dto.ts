@@ -22,19 +22,19 @@ class PaginationMetaDto {
 }
 
 class PaginationLinksDto {
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   first: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=18' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=18' })
   last: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   current: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=2' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=2' })
   next: string;
 
-  @ApiProperty({ example: 'http://localhost:3000/films?limit=25&page=1' })
+  @ApiProperty({ example: 'http://localhost:3000/films?page=1' })
   previous: string;
 }
 
