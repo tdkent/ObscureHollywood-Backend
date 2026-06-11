@@ -40,7 +40,7 @@ describe('FilmsController', () => {
   });
 
   describe('findAll', () => {
-    const query: GetFilmsDto = { limit: '25', orderBy: 'nameAsc', page: '1' };
+    const query: GetFilmsDto = { orderBy: 'nameAsc', page: '1' };
 
     it('should call findAll service method once', async () => {
       await controller.findAll(query);

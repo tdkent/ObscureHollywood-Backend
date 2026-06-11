@@ -40,7 +40,6 @@ describe('ArticlesController', () => {
 
   describe('findAll', () => {
     const query: GetArticlesDto = {
-      limit: '25',
       page: '1',
       orderBy: 'nameAsc',
     };

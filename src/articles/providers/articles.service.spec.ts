@@ -81,12 +81,10 @@ describe('ArticlesService', () => {
 
   describe('findAll', () => {
     const query: GetArticlesDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
     };
     const queryWithSearch: GetArticlesDto = {
-      limit: '25',
       orderBy: 'nameAsc',
       page: '1',
       q: 'search',

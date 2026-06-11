@@ -52,7 +52,6 @@ describe('PersonsService', () => {
 
   describe('findAll', () => {
     const query: GetPersonsDto = {
-      limit: '25',
       orderBy: 'lastNameAsc',
       page: '1',
     };
@@ -66,7 +65,6 @@ describe('PersonsService', () => {
 
       expect(repository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
-          take: Number(query.limit),
           skip: (Number(query.page) - 1) * 10,
           order: { lastName: 'ASC', firstName: 'ASC' },
         }),

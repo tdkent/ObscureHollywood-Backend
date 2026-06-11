@@ -79,7 +79,7 @@ describe('FilmsService', () => {
   });
 
   describe('findAll', () => {
-    const query: GetFilmsDto = { limit: '10', orderBy: 'nameAsc', page: '1' };
+    const query: GetFilmsDto = { orderBy: 'nameAsc', page: '1' };
 
     it('should call repository.createQueryBuilder', async () => {
       mockFilmRepository.count.mockResolvedValue(100);
