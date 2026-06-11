@@ -1,23 +1,13 @@
 import * as z from 'zod';
 
 interface Inputs {
-  limitParam: string;
   orderParam: string;
   pageParam: string;
   route: 'articles' | 'features' | 'films' | 'people' | 'quiz' | 'studios';
 }
 
 /** Validate and return coerced URL search params. */
-export function validateParams({
-  route,
-  limitParam,
-  pageParam,
-  orderParam,
-}: Inputs) {
-  // Validate pagination limit
-  const Limit = z.literal(['25', '50']);
-  const { success: validLimit } = Limit.safeParse(limitParam);
-
+export function validateParams({ route, pageParam, orderParam }: Inputs) {
   // Validate page
   const Page = z.coerce.number().int().positive();
   const { success: validPage } = Page.safeParse(pageParam);
@@ -58,7 +48,6 @@ export function validateParams({
   }
 
   const params = {
-    limit: validLimit ? Number(limitParam) : 25,
     page: validPage ? Number(pageParam) : 1,
     orderBy: validOrder,
   };

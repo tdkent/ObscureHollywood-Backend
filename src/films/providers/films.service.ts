@@ -5,6 +5,7 @@ import { Film } from 'src/films/entities/film.entity';
 import { Repository } from 'typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 @Injectable()
 export class FilmsService {
@@ -24,15 +25,9 @@ export class FilmsService {
    * Send a list of films with pagination and sorting.
    */
   public async findAll(reqQuery: GetFilmsDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-      tag: tags,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam, tag: tags } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'films',
@@ -71,15 +66,15 @@ export class FilmsService {
         .addGroupBy('film.slug')
         .having('COUNT(*) = :count', { count: tags.length })
         .orderBy(sortField, sortDirection)
-        .take(limit)
-        .skip((page - 1) * limit)
+        .take(PAGINATION_TAKE_COUNT)
+        .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getMany();
     } else {
       films = await this.filmsRepository
         .createQueryBuilder('film')
         .orderBy(sortField, sortDirection)
-        .take(limit)
-        .skip((page - 1) * limit)
+        .take(PAGINATION_TAKE_COUNT)
+        .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getMany();
 
       totalItems = await this.filmsRepository.count();
@@ -87,7 +82,6 @@ export class FilmsService {
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
       data: films,
-      limit,
       orderBy,
       page,
       tags,

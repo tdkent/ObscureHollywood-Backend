@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
 import { CreateQuizResultDto } from 'src/quiz/dto/create-quiz-result.dto';
@@ -30,14 +31,9 @@ export class QuizService {
    * Send a list of quizzes with pagination and sorting.
    */
   public async findAll(reqQuery: GetQuizzesDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'quiz',
@@ -45,12 +41,11 @@ export class QuizService {
 
     const [data, count] = await this.quizRepository.findAndCount({
       order: orderBy === 'nameDesc' ? { name: 'DESC' } : { name: 'ASC' },
-      take: limit,
-      skip: (page - 1) * limit,
+      take: PAGINATION_TAKE_COUNT,
+      skip: (page - 1) * PAGINATION_TAKE_COUNT,
     });
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
-      limit,
       orderBy,
       page,
       data,

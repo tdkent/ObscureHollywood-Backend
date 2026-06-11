@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 class PaginationMetaDto {
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: PAGINATION_TAKE_COUNT })
   itemsPerPage: number;
 
   @ApiProperty({ example: 178 })
@@ -16,7 +17,7 @@ class PaginationMetaDto {
   @ApiProperty({ example: 1 })
   firstItemOnPage: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: PAGINATION_TAKE_COUNT })
   lastItemOnPage: number;
 }
 

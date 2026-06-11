@@ -6,6 +6,7 @@ import { GetFilmsByTagDto } from 'src/tags/dto/get-tag.dto';
 import { Film } from 'src/films/entities/film.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { validateParams } from 'src/common/utils/validate';
+import { PAGINATION_TAKE_COUNT } from 'src/common/constants/constants';
 
 @Injectable()
 export class TagsService {
@@ -51,14 +52,9 @@ export class TagsService {
   }
 
   public async findFilmsByTag(slug: string, reqQuery: GetFilmsByTagDto) {
-    const {
-      limit: limitParam,
-      orderBy: orderParam,
-      page: pageParam,
-    } = reqQuery;
+    const { orderBy: orderParam, page: pageParam } = reqQuery;
 
-    const { limit, orderBy, page } = validateParams({
-      limitParam,
+    const { orderBy, page } = validateParams({
       orderParam,
       pageParam,
       route: 'films',
@@ -80,13 +76,12 @@ export class TagsService {
             : orderBy === 'yearDesc'
               ? { releaseYear: 'DESC', name: 'ASC' }
               : { name: 'ASC', releaseYear: 'ASC' },
-      take: limit,
-      skip: (page - 1) * limit,
+      take: PAGINATION_TAKE_COUNT,
+      skip: (page - 1) * PAGINATION_TAKE_COUNT,
     });
 
     const finalResponse = this.paginationProvider.createPaginationMetadata({
       data: films,
-      limit,
       orderBy,
       page,
       totalItems: count,
