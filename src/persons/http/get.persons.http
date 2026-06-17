@@ -8,7 +8,7 @@ GET {{localBaseUrl}}/people
 ### Find recent people
 # GET /people/recent
 # Sends array of recent people
-GET {{localBaseUrl}}/people/ray-crash-corrigan
+GET {{localBaseUrl}}/people/recent
 
 ### Find a single person
 # GET /people/:slug

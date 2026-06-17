@@ -63,8 +63,18 @@ export class PersonsService {
       where: {
         article: Not(IsNull()),
       },
+      relations: {
+        article: true,
+      },
+      select: {
+        article: {
+          publishDate: true,
+        },
+      },
       order: {
-        createdAt: 'DESC',
+        article: {
+          publishDate: 'DESC',
+        },
       },
       take: 3,
     });

@@ -46,6 +46,11 @@ export class Article {
   category: Category;
 
   @Column({
+    type: 'date',
+  })
+  publishDate: Date;
+
+  @Column({
     type: 'text',
   })
   htmlContent: string;
