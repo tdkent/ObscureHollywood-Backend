@@ -93,8 +93,18 @@ export class FilmsService {
 
   public async findRecent() {
     return this.filmsRepository.find({
+      relations: {
+        article: true,
+      },
+      select: {
+        article: {
+          publishDate: true,
+        },
+      },
       order: {
-        createdAt: 'DESC',
+        article: {
+          publishDate: 'DESC',
+        },
       },
       take: 3,
     });

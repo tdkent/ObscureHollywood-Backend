@@ -51,10 +51,20 @@ export class FeaturesService {
 
   public async findRecent() {
     return this.featuresRepository.find({
-      take: 3,
-      order: {
-        createdAt: 'DESC',
+      relations: {
+        article: true,
       },
+      select: {
+        article: {
+          publishDate: true,
+        },
+      },
+      order: {
+        article: {
+          publishDate: 'DESC',
+        },
+      },
+      take: 3,
     });
   }
 
