@@ -47,25 +47,25 @@ export class ArticlesService {
         .createQueryBuilder()
         .addCommonTableExpression(
           `
-          SELECT feature.slug, feature.name, 'feature' AS category, article."textContent", article."htmlContent"
+          SELECT feature.slug, feature.name, CAST(null as person_gender_enum) AS gender, 'feature' AS category, article."textContent", article."htmlContent"
           FROM feature
           LEFT JOIN article ON feature.slug = article.slug
 
           UNION
 
-          SELECT film.slug, film.name, 'film' AS category, article."textContent", article."htmlContent"
+          SELECT film.slug, film.name, CAST(null as person_gender_enum) AS gender, 'film' AS category, article."textContent", article."htmlContent"
           FROM film
           LEFT JOIN article ON film.slug = article.slug
 
           UNION
 
-          SELECT person.slug, person.name, 'person' AS category, article."textContent", article."htmlContent"
+          SELECT person.slug, person.name, person.gender AS gender, 'person' AS category, article."textContent", article."htmlContent"
           FROM person
           LEFT JOIN article ON person.slug = article.slug
 
           UNION
 
-          SELECT studio.slug, studio.name, 'studio' AS category, '' AS "textContent", '' AS "htmlContent"
+          SELECT studio.slug, studio.name, CAST(null as person_gender_enum) AS gender, 'studio' AS category, '' AS "textContent", '' AS "htmlContent"
           FROM studio
         `,
           'search',
@@ -73,6 +73,7 @@ export class ArticlesService {
         .select('row_number() over () as id')
         .addSelect('s.name')
         .addSelect('s.slug')
+        .addSelect('s.gender')
         .addSelect('s.category')
         .addSelect('s."htmlContent"')
         .addSelect('COUNT(*) OVER() as count') // Get total row count w/o grouping
@@ -97,6 +98,7 @@ export class ArticlesService {
           id: Number(result.id),
           name: result.name,
           slug: result.slug,
+          gender: result.gender,
           category: result.category,
           htmlContent: result.htmlContent,
         };

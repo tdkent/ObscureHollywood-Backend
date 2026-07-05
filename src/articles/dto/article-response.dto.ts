@@ -10,6 +10,9 @@ export class ArticleResponse {
   @ApiProperty({ example: 'the-americano-1916' })
   slug: string;
 
+  @ApiProperty({ example: null })
+  gender: string | null;
+
   @ApiProperty({ example: 'film' })
   category: 'feature' | 'film' | 'person';
 
