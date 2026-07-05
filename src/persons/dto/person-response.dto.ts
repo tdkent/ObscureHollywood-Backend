@@ -19,6 +19,9 @@ export class PersonResponseDto {
   @ApiProperty({ example: 'San Francisco, California' })
   birthPlace: string;
 
+  @ApiProperty({ example: 'female' })
+  gender: string;
+
   @ApiProperty({ example: 'Los Angeles, California' })
   deathPlace: string;
 }

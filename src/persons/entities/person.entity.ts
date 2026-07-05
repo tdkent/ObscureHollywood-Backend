@@ -18,6 +18,11 @@ import {
 } from 'src/persons/entities/person-film.entity';
 import { Exclude } from 'class-transformer';
 
+export enum Gender {
+  FEMALE = 'female',
+  MALE = 'male',
+}
+
 @Entity()
 export class Person {
   @PrimaryGeneratedColumn()
@@ -79,6 +84,13 @@ export class Person {
     nullable: true,
   })
   deathPlace: string;
+
+  @Column({
+    type: 'enum',
+    enum: Gender,
+    nullable: true,
+  })
+  gender: Gender;
 
   @CreateDateColumn()
   @Exclude()
