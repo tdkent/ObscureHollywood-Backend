@@ -86,12 +86,12 @@ export class StudiosService {
       },
       order:
         orderBy === 'nameDesc'
-          ? { name: 'DESC', releaseYear: 'ASC' }
+          ? { sortName: 'DESC', releaseYear: 'ASC' }
           : orderBy === 'yearAsc'
-            ? { releaseYear: 'ASC', name: 'ASC' }
+            ? { releaseYear: 'ASC', sortName: 'ASC' }
             : orderBy === 'yearDesc'
-              ? { releaseYear: 'DESC', name: 'ASC' }
-              : { name: 'ASC', releaseYear: 'ASC' },
+              ? { releaseYear: 'DESC', sortName: 'ASC' }
+              : { sortName: 'ASC', releaseYear: 'ASC' },
       take: PAGINATION_TAKE_COUNT,
       skip: (page - 1) * PAGINATION_TAKE_COUNT,
     });
