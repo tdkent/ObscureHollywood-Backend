@@ -162,7 +162,7 @@ describe('StudiosService', () => {
       expect(filmRepository.findAndCount).toHaveBeenCalledWith(
         expect.objectContaining({
           skip: (Number(query.page) - 1) * 10,
-          order: { name: 'ASC', releaseYear: 'ASC' },
+          order: { sortName: 'ASC', releaseYear: 'ASC' },
         }),
       );
     });
