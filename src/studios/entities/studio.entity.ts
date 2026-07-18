@@ -9,6 +9,13 @@ import {
 import { Film, type Film as FilmType } from 'src/films/entities/film.entity';
 import { Exclude } from 'class-transformer';
 
+enum Country {
+  ENGLAND = 'England',
+  FRANCE = 'France',
+  GERMANY = 'Germany',
+  USA = 'United States',
+}
+
 @Entity()
 export class Studio {
   @PrimaryGeneratedColumn()
@@ -27,6 +34,39 @@ export class Studio {
     unique: true,
   })
   name: string;
+
+  @Column({
+    type: 'smallint',
+    nullable: true,
+  })
+  yearFounded: number;
+
+  @Column({
+    type: 'smallint',
+    nullable: true,
+  })
+  yearClosed: number;
+
+  @Column({
+    type: 'enum',
+    enum: Country,
+    nullable: true,
+  })
+  country: Country;
+
+  @Column({
+    type: 'text',
+    array: true,
+    nullable: true,
+  })
+  otherNames: string[];
+
+  @Column({
+    type: 'varchar',
+    length: 250,
+    nullable: true,
+  })
+  description: string;
 
   @CreateDateColumn()
   @Exclude()
