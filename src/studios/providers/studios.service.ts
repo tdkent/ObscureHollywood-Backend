@@ -56,11 +56,12 @@ export class StudiosService {
 
   public async findOne(slug: string) {
     const studio = await this.studiosRepository.findOne({
-      where: {
-        slug,
-      },
+      where: { slug },
       relations: {
         films: true,
+        incomingRelations: {
+          studio: true,
+        },
       },
     });
 

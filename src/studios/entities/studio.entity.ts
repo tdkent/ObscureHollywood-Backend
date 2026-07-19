@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Film, type Film as FilmType } from 'src/films/entities/film.entity';
 import { Exclude } from 'class-transformer';
+import { StudioRelation } from 'src/studios/entities/studio-relation.entity';
 
 enum Country {
   ENGLAND = 'England',
@@ -80,4 +81,10 @@ export class Studio {
     onDelete: 'CASCADE',
   })
   films: FilmType[];
+
+  @OneToMany(() => StudioRelation, (st) => st.studio)
+  outgoingRelations: StudioRelation[];
+
+  @OneToMany(() => StudioRelation, (st) => st.relatedStudio)
+  incomingRelations: StudioRelation[];
 }

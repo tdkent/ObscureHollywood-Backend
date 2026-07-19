@@ -5,4 +5,10 @@ import { StudioResponseDto } from 'src/studios/dto/studio-response.dto';
 export class GetStudioResponseDto extends StudioResponseDto {
   @ApiProperty({ type: [FilmResponseDto] })
   films: FilmResponseDto[];
+
+  @ApiProperty({ type: [StudioResponseDto] })
+  incomingRelations: {
+    id: number;
+    studio: StudioResponseDto;
+  }[];
 }
