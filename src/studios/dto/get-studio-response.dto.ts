@@ -7,5 +7,8 @@ export class GetStudioResponseDto extends StudioResponseDto {
   films: FilmResponseDto[];
 
   @ApiProperty({ type: [StudioResponseDto] })
-  incomingRelations: StudioResponseDto[];
+  incomingRelations: {
+    id: number;
+    studio: StudioResponseDto;
+  }[];
 }
