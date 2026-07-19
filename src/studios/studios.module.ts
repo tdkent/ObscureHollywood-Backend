@@ -6,10 +6,11 @@ import { Studio } from 'src/studios/entities/studio.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { FilmsService } from 'src/films/providers/films.service';
 import { Film } from 'src/films/entities/film.entity';
+import { StudioRelation } from 'src/studios/entities/studio-relation.entity';
 
 @Module({
   controllers: [StudiosController],
   providers: [StudiosService, PaginationProvider, FilmsService],
-  imports: [TypeOrmModule.forFeature([Studio, Film])],
+  imports: [TypeOrmModule.forFeature([Studio, StudioRelation, Film])],
 })
 export class StudiosModule {}
