@@ -170,12 +170,17 @@ export class ArticlesService {
         .addSelect('s.gender')
         .addSelect('s.category')
         .addSelect(
-          'ts_rank(to_tsvector("searchText"), websearch_to_tsquery(:searchString)) as rank',
+          `ts_rank(
+            to_tsvector(s."searchText"),
+            websearch_to_tsquery(:searchString)
+          )`,
+          'rank',
         )
         .addSelect('COUNT(*) OVER() as count') // Get total row count w/o grouping
         .from('search', 's') // Same as `FROM search AS s`
         .where(
-          'to_tsvector("searchText") @@ websearch_to_tsquery(:searchString)',
+          `to_tsvector(s."searchText") 
+          @@ websearch_to_tsquery(:searchString)`,
         )
         .setParameter('searchString', searchString)
         .orderBy('rank', 'DESC')
