@@ -31,7 +31,7 @@ export class ArticlesService {
       route: 'articles',
     });
 
-    let articles: ArticleResponse[];
+    let articles: Partial<ArticleResponse>[];
     let totalItems: number;
 
     if (!searchString || searchString.length < 2) {
@@ -183,7 +183,7 @@ export class ArticlesService {
         .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getRawMany();
 
-      const results = searchResultsQb as (ArticleResponse & {
+      const results = searchResultsQb as (Partial<ArticleResponse> & {
         count: string;
       })[];
 
@@ -196,7 +196,6 @@ export class ArticlesService {
           slug: result.slug,
           gender: result.gender,
           category: result.category,
-          htmlContent: result.htmlContent,
         };
       });
     }
