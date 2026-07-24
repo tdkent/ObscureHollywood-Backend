@@ -20,7 +20,7 @@ export class ArticlesService {
   ) {}
 
   /**
-   * Send a list of features with pagination and sorting.
+   * Send a list of search results with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
     const { orderBy: orderParam, page: pageParam, q: searchString } = reqQuery;
@@ -38,17 +38,25 @@ export class ArticlesService {
       articles = [];
       totalItems = 0;
     } else {
-      const sortDirection = orderBy === 'nameAsc' ? 'ASC' : 'DESC';
-
-      /**
-       * Search feature, film, person, and studio tables
-       */
       const searchResultsQb = await this.dataSource
         .createQueryBuilder()
+        // CTE combines data from feature, film, person, studio, and tag tables
+        // Searchable text is combined into "searchText" column
+        // Related data (such as film cast/crew list) is aggregated into a string
+        // Nullable rows are coalesced to prevent nulling all data in row
+        // Gender row is required to display person fallback images
+
+        // Included data:
+        // feature: name, text content
+        // film: name, release year, studio, text content, people, tags
+        // person: name, text content, birth place, birth year, films
+        // studio: name, other names, description, films
+        // tag: name, description, films
         .addCommonTableExpression(
           `
           SELECT
             fe.slug,
+            fe.name,
             'feature' AS category,
             CAST(null as person_gender_enum) AS gender,
             (fe.name || ' ' || COALESCE(a."textContent", '')) AS "searchText"
@@ -60,6 +68,7 @@ export class ArticlesService {
 
           SELECT
             fi.slug,
+            fi.name,
             'film' AS category,
             CAST(null as person_gender_enum) AS gender,
             (fi.name || ' ' || fi."releaseYear" || ' ' ||
@@ -94,6 +103,7 @@ export class ArticlesService {
 
           SELECT
             p.slug,
+            p.name,
             'person' AS category,
             p.gender AS gender,
             (p.name || ' ' ||
@@ -117,6 +127,7 @@ export class ArticlesService {
 
           SELECT
             s.slug,
+            s.name,
             'studio' AS category,
             CAST(null as person_gender_enum) AS gender,
             (s.name || ' ' ||
@@ -135,6 +146,7 @@ export class ArticlesService {
 
           SELECT
             t.slug,
+            t.name,
             'tag' AS category,
             CAST(null as person_gender_enum) AS gender,
             (t.name || ' ' || COALESCE(t.description, '') || ' ' ||
@@ -154,15 +166,19 @@ export class ArticlesService {
         )
         .select('row_number() over () as id')
         .addSelect('s.slug')
+        .addSelect('s.name')
         .addSelect('s.gender')
         .addSelect('s.category')
-        .addSelect('s."searchText"')
+        .addSelect(
+          'ts_rank(to_tsvector("searchText"), websearch_to_tsquery(:searchString)) as rank',
+        )
         .addSelect('COUNT(*) OVER() as count') // Get total row count w/o grouping
         .from('search', 's') // Same as `FROM search AS s`
-        .where('s."searchText" ILIKE :searchString', {
-          searchString: `%${searchString}%`,
-        })
-        .orderBy('slug', sortDirection)
+        .where(
+          'to_tsvector("searchText") @@ websearch_to_tsquery(:searchString)',
+        )
+        .setParameter('searchString', searchString)
+        .orderBy('rank', 'DESC')
         .take(PAGINATION_TAKE_COUNT)
         .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getRawMany();
