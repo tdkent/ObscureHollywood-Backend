@@ -4,4 +4,4 @@
 GET {{localBaseUrl}}/articles
 ?page=1
 &orderBy=nameAsc
-&q=the
+&q=arzner

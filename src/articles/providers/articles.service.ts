@@ -20,7 +20,7 @@ export class ArticlesService {
   ) {}
 
   /**
-   * Send a list of features with pagination and sorting.
+   * Send a list of search results with pagination and sorting.
    */
   public async findAll(reqQuery: GetArticlesDto) {
     const { orderBy: orderParam, page: pageParam, q: searchString } = reqQuery;
@@ -31,63 +31,164 @@ export class ArticlesService {
       route: 'articles',
     });
 
-    let articles: ArticleResponse[];
+    let articles: Partial<ArticleResponse>[];
     let totalItems: number;
 
     if (!searchString || searchString.length < 2) {
       articles = [];
       totalItems = 0;
     } else {
-      const sortDirection = orderBy === 'nameAsc' ? 'ASC' : 'DESC';
-
-      /**
-       * Search feature, film, person, and studio tables
-       */
       const searchResultsQb = await this.dataSource
         .createQueryBuilder()
+        // CTE combines data from feature, film, person, studio, and tag tables
+        // Searchable text is combined into "searchText" column
+        // Related data (such as film cast/crew list) is aggregated into a string
+        // Nullable rows are coalesced to prevent nulling all data in row
+        // Gender row is required to display person fallback images
+
+        // Included data:
+        // feature: name, text content
+        // film: name, release year, studio, text content, people, tags
+        // person: name, text content, birth place, birth year, films
+        // studio: name, other names, description, films
+        // tag: name, description, films
         .addCommonTableExpression(
           `
-          SELECT feature.slug, feature.name, CAST(null as person_gender_enum) AS gender, 'feature' AS category, article."textContent", article."htmlContent"
-          FROM feature
-          LEFT JOIN article ON feature.slug = article.slug
+          SELECT
+            fe.slug,
+            fe.name,
+            'feature' AS category,
+            CAST(null as person_gender_enum) AS gender,
+            (fe.name || ' ' || COALESCE(a."textContent", '')) AS "searchText"
+          FROM feature AS fe
+          LEFT JOIN article AS a
+          ON fe.slug = a.slug
 
           UNION
 
-          SELECT film.slug, film.name, CAST(null as person_gender_enum) AS gender, 'film' AS category, article."textContent", article."htmlContent"
-          FROM film
-          LEFT JOIN article ON film.slug = article.slug
+          SELECT
+            fi.slug,
+            fi.name,
+            'film' AS category,
+            CAST(null as person_gender_enum) AS gender,
+            (fi.name || ' ' || fi."releaseYear" || ' ' ||
+            (SELECT COALESCE(s.name, '') FROM film 
+            LEFT JOIN studio s ON film."studioId" = s.id
+            WHERE film.id = fi.id) || ' ' ||
+            COALESCE(a."textContent", '') || ' ' ||
+            (SELECT
+              COALESCE(STRING_AGG(DISTINCT p.name, ' '), '')
+              FROM film AS f
+              LEFT JOIN person_film AS pf
+              ON f.id = pf."filmId"
+              LEFT JOIN person AS p
+              ON p.id = pf."personId"
+              WHERE f.id = fi.id
+              GROUP BY f.id) || ' ' ||
+            (SELECT
+              COALESCE(STRING_AGG(t.name, ' '), '')
+              FROM film AS f
+              LEFT JOIN film_tag AS ft
+              ON f.id = ft."filmId"
+              LEFT JOIN tag AS t
+              ON t.id = ft."tagId"
+              WHERE f.id = fi.id
+              GROUP BY f.id)
+            ) AS "searchText"
+          FROM film AS fi
+          LEFT JOIN article AS a
+          ON fi.slug = a.slug
 
           UNION
 
-          SELECT person.slug, person.name, person.gender AS gender, 'person' AS category, article."textContent", article."htmlContent"
-          FROM person
-          LEFT JOIN article ON person.slug = article.slug
+          SELECT
+            p.slug,
+            p.name,
+            'person' AS category,
+            p.gender AS gender,
+            (p.name || ' ' ||
+            COALESCE(a."textContent", '') || ' ' || 
+            COALESCE(p."birthPlace", '') || ' ' || 
+            COALESCE(p."deathPlace", '') || ' ' ||
+            (SELECT
+              COALESCE(STRING_AGG(DISTINCT f.name, ' '), '')
+              FROM person AS pe
+              LEFT JOIN person_film AS pf
+              ON pe.id = pf."personId"
+              LEFT JOIN film AS f
+              ON f.id = pf."filmId"
+              WHERE p.id = pe.id
+              GROUP BY pe.id)) AS "searchText"
+          FROM person AS p
+          LEFT JOIN article as a
+          ON p.slug = a.slug
 
           UNION
 
-          SELECT studio.slug, studio.name, CAST(null as person_gender_enum) AS gender, 'studio' AS category, '' AS "textContent", '' AS "htmlContent"
-          FROM studio
+          SELECT
+            s.slug,
+            s.name,
+            'studio' AS category,
+            CAST(null as person_gender_enum) AS gender,
+            (s.name || ' ' ||
+            COALESCE(ARRAY_TO_STRING(s."otherNames", ' '), '') || ' ' ||
+            COALESCE(s.description, '') || ' ' ||
+            (SELECT
+              COALESCE(STRING_AGG(f.name, ' '), '')
+              FROM studio st
+              LEFT JOIN film f
+              ON st.id = f."studioId"
+              WHERE st.id = s.id
+              GROUP BY st.id)) AS "searchText"
+          FROM studio AS s
+
+          UNION
+
+          SELECT
+            t.slug,
+            t.name,
+            'tag' AS category,
+            CAST(null as person_gender_enum) AS gender,
+            (t.name || ' ' || COALESCE(t.description, '') || ' ' ||
+            (SELECT
+              COALESCE(STRING_AGG(f.name, ' '), '')
+              FROM tag
+              LEFT JOIN film_tag AS ft
+              ON tag.id = ft."tagId"
+              LEFT JOIN film AS f
+              ON f.id = ft."filmId"
+              WHERE tag.id = t.id
+              GROUP BY tag.id
+            )) AS "searchText"
+          FROM tag AS t
         `,
           'search',
         )
         .select('row_number() over () as id')
-        .addSelect('s.name')
         .addSelect('s.slug')
+        .addSelect('s.name')
         .addSelect('s.gender')
         .addSelect('s.category')
-        .addSelect('s."htmlContent"')
+        .addSelect(
+          `ts_rank(
+            to_tsvector(s."searchText"),
+            websearch_to_tsquery(:searchString)
+          )`,
+          'rank',
+        )
         .addSelect('COUNT(*) OVER() as count') // Get total row count w/o grouping
         .from('search', 's') // Same as `FROM search AS s`
         .where(
-          's.name ILIKE :searchString OR s."textContent" ILIKE :searchString',
-          { searchString: `%${searchString}%` },
+          `to_tsvector(s."searchText") 
+          @@ websearch_to_tsquery(:searchString)`,
         )
-        .orderBy('name', sortDirection)
+        .setParameter('searchString', searchString)
+        .orderBy('rank', 'DESC')
         .take(PAGINATION_TAKE_COUNT)
         .skip((page - 1) * PAGINATION_TAKE_COUNT)
         .getRawMany();
 
-      const results = searchResultsQb as (ArticleResponse & {
+      const results = searchResultsQb as (Partial<ArticleResponse> & {
         count: string;
       })[];
 
@@ -100,7 +201,6 @@ export class ArticlesService {
           slug: result.slug,
           gender: result.gender,
           category: result.category,
-          htmlContent: result.htmlContent,
         };
       });
     }
