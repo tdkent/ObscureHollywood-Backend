@@ -4,12 +4,14 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Quiz, type Quiz as QuizType } from 'src/quiz/entities/quiz.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity()
+@Unique(['questionNumber', 'quizSlug'])
 export class QuizQuestion {
   @PrimaryGeneratedColumn()
   id: number;

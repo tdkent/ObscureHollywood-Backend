@@ -72,6 +72,12 @@ export class Person {
   age: number;
 
   @Column({
+    type: 'boolean',
+    nullable: true,
+  })
+  isAlive: boolean;
+
+  @Column({
     type: 'varchar',
     length: 64,
     nullable: true,
