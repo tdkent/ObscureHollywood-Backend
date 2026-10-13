@@ -92,6 +92,27 @@ export class Person {
   deathPlace: string;
 
   @Column({
+    type: 'varchar',
+    length: 32,
+    nullable: true,
+  })
+  partialBirthDate: string;
+
+  @Column({
+    type: 'varchar',
+    length: 32,
+    nullable: true,
+  })
+  partialDeathDate: string;
+
+  @Column({
+    type: 'varchar',
+    length: 32,
+    nullable: true,
+  })
+  ageRange: string;
+
+  @Column({
     type: 'enum',
     enum: Gender,
     nullable: true,
