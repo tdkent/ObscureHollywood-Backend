@@ -1,5 +1,8 @@
 {
   "name": "obscure-hollywood-backend",
+  "engines": {
+    "node": "24.x"
+  },
   "author": "Tim Kent <timkentdev@gmail.com>",
   "private": true,
   "scripts": {
